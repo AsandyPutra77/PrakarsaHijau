@@ -1,0 +1,34 @@
+:root {
+    --font-color: #acd364;
+    --background-color: #dd9090;
+  }
+
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--background-color);
+    color: var(--font-color);
+    
+
+}
+
+.app-container{
+    color: var(--on-background);
+    background-color: var(--background);
+    min-height: 100vh;
+    display: flex;
+}
+
+.app-container h1 {
+    margin: 8px, 0;
+    flex: 1;
+    color: var(--font-color);
+    text-align: center;
+
+}
