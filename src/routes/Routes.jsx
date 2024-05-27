@@ -6,6 +6,8 @@ import { Home } from "../pages/home/Home";
 import { Register } from "../pages/auth/Register";
 import { Landing } from "../pages/landing/Landing";
 import { Profile } from "../pages/profile/Profile";
+import { Article } from "../pages/article/Article";
+import { ArticleDetail } from "../pages/article/ArticleDetails";
 
 
 export const Routers = () => {
@@ -43,6 +45,8 @@ export const Routers = () => {
             <Route path="/feedback/:id" element={'/*FeedbackDetails*/'}/>
             <Route path="/landing" element={<Landing />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/article" element={<Article />} />
+            <Route path="/article/:id" element={<ArticleDetail />}/>
         </Routes>
     )
 }
