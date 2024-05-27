@@ -72,11 +72,12 @@ export const RegisterInput = () => {
 
   return (
     <Flex
-      minH={'100vh'}
       align={'center'}
       justify={'center'}
-      bg={useColorModeValue('gray.50', 'gray.800')}>
-      <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+      mt='90px'
+      bg={useColorModeValue('gray.50', 'gray.800')}
+      style={{overflow: 'hidden'}}>
+      <Stack spacing={8} maxW={'lg'} style={{minHeight: '100vh'}}>
         <Stack align={'center'}>
           <Heading fontSize={'4xl'} textAlign={'center'}>
             Sign up
@@ -143,7 +144,7 @@ export const RegisterInput = () => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-            <Stack spacing={10} pt={2}>
+            <Stack spacing={10}>
               <Button
                 type='submit'
                 loadingText="Submitting"
@@ -156,7 +157,7 @@ export const RegisterInput = () => {
                 Sign up
               </Button>
             </Stack>
-            <Stack pt={6}>
+            <Stack>
             <Box textAlign={'center'}>
               Already a user? <ChakraLink as={ReactRouterLink} color={'blue.400'} to="/login">Login</ChakraLink>
             </Box>

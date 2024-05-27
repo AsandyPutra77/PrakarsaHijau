@@ -10,8 +10,6 @@ import {
     VStack,
     useToast
   } from '@chakra-ui/react';
-  import { BsGithub, BsDiscord, BsPerson } from 'react-icons/bs';
-  import { FaTrophy } from "react-icons/fa";
   import { GoTrophy } from "react-icons/go";
   import { useState , useEffect} from 'react';
   import { auth, db } from '../../firebase/firebase';

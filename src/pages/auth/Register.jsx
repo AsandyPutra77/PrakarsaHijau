@@ -3,7 +3,7 @@ import { Layout } from '../../components/commons/Layout'
 
 export const Register = () => {
     return (
-        <Layout>
+        <Layout isAuth>
             <RegisterInput isAuth/>
         </Layout>
     )
