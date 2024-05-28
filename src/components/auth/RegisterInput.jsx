@@ -13,29 +13,33 @@ import {
   Text,
   useColorModeValue,
   Link as ChakraLink,
-  useToast
+  useToast,
+  Grid,
+  GridItem,
+  Image,
+  Icon
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
-import { Link as ReactRouterLink } from 'react-router-dom'
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db} from '../../firebase/firebase';
+import { auth, db } from '../../firebase/firebase';
 import { setDoc, doc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
+import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
 
 export const RegisterInput = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [ fName, setFName ] = useState('')
-  const [ lName, setLName ] = useState('')
-  const [ email, setEmail ] = useState('')
-  const [ password, setPassword ] = useState('')
+  const [fName, setFName] = useState('');
+  const [lName, setLName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const navigate = useNavigate();
-
-  const toast = useToast()
+  const toast = useToast();
 
   const handleRegister = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
@@ -49,7 +53,7 @@ export const RegisterInput = () => {
         }) 
         
       }
-      console.log("User Registered Successfully !")
+      console.log("User Registered Successfully !");
       toast({
         title: 'Account created.',
         description: "We've created your account for you.",
@@ -57,19 +61,18 @@ export const RegisterInput = () => {
         duration: 3000,
         isClosable: true,
         onCloseComplete: () => navigate('/login')
- 
-      })
-      
+      });
     } catch (error) {
-      console.log(error.message)
+      console.log(error.message);
       toast({
         title: 'Account failed to create.',
         description: "Email already in use or password is too weak.",
         status: 'error',
         duration: 9000,
-        isClosable: true,})
+        isClosable: true,
+      });
     }
-  }
+  };
 
   return (
     <Flex
@@ -156,17 +159,18 @@ export const RegisterInput = () => {
                   bg: 'blue.500',
                 }}>
                 Sign up
-              </Button>
+              </Heading>
+              <Text fontSize={'lg'} color={'gray.600'}>
+                Selamat Datang di <Box as="span" align="center" color={"green"}>Prakarsa Hijau</Box>
+              </Text>
             </Stack>
             <Stack>
             <Box textAlign={'center'}>
               Already a user? <ChakraLink as={ReactRouterLink} color={'blue.400'} to="/login">Login</ChakraLink>
             </Box>
-            </Stack>
           </Stack>
-          </form>
-        </Box>
-      </Stack>
-    </Flex>
+        </Flex>
+      </GridItem>
+    </Grid>
   );
-}
+};

@@ -3,7 +3,6 @@ import { Box, Heading, Text, Spinner, Image, Flex} from '@chakra-ui/react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { Loading } from '../helper/Loading';
-
 export const ArticleDetailCard = () => {
     const [article, setArticle] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -27,6 +26,7 @@ export const ArticleDetailCard = () => {
       }, [id]);
 
     if (loading) {
+
         return <Loading />;
       }
 

@@ -10,23 +10,56 @@ import {
   Heading,
   Text,
   useColorModeValue,
-  useToast
+  useToast,
+  Grid,
+  GridItem,
+  Image,
+  Icon
 } from '@chakra-ui/react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
+
 import { useNavigate} from 'react-router-dom';
 import { useState } from 'react';
 import { signInWithEmailAndPassword} from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
+import { FaEnvelope, FaLock } from 'react-icons/fa'; // Import envelope and lock icons
 
 export const LoginInput = () => {
+
 const [ email, setEmail ] = useState('');
 const [ password, setPassword ] = useState('');
 const [ isLoading, setLoading] = useState(false);
 
-const toast = useToast();
 
-const navigate = useNavigate();
+  const toast = useToast();
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      console.log("User Logged In Successfully !");
+      toast({
+        title: 'Login successful.',
+        description: "You've successfully logged in.",
+        status: 'success',
+        duration: 4000,
+        isClosable: true,
+        onCloseComplete: () => navigate('/landing')
+      });
+    } catch (error) {
+      console.log(error.message);
+      toast({
+        title: 'Login failed.',
+        description: "Email or password is incorrect.",
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+  };
+
 
 const handleSubmit = async (e) => {
   e.preventDefault();
@@ -107,10 +140,8 @@ return (
               Sign in
             </Button>
           </Stack>
-        </Stack>
-        </form>
-      </Box>
-    </Stack>
-  </Flex>
-);
+        </Flex>
+      </GridItem>
+    </Grid>
+  );
 }
