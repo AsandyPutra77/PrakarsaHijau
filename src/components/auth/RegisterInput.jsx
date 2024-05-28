@@ -48,8 +48,10 @@ export const RegisterInput = () => {
         await setDoc(doc(db, 'users', user.uid), {
           email: user.email,
           uid: user.uid,
-          displayName: fName + ' ' + lName
-        });
+          displayName: fName + ' ' + lName,
+          role: 'normal'
+        }) 
+        
       }
       console.log("User Registered Successfully !");
       toast({
@@ -73,140 +75,98 @@ export const RegisterInput = () => {
   };
 
   return (
-    <Grid
-      minH={'100vh'}
-      templateColumns={{ base: '1fr', md: '1fr 1fr' }}
+    <Flex
+      align={'center'}
+      justify={'center'}
+      mt='90px'
       bg={useColorModeValue('gray.50', 'gray.800')}
-    >
-      <GridItem>
-        <Flex align={'center'} justify={'center'} h="100%">
-          <Box
-            bg="#C6F6D5"
-            width="100%"
-            height="100%"
-            position="relative"
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Image
-              src="/assets/Group 1.png"
-              alt="Group 1"
-              objectFit="center"
-              w="60%"
-              h="50%"
-            />
-          </Box>
-        </Flex>
-      </GridItem>
-      <GridItem>
-        <Flex align={'center'} justify={'center'} h="100%">
-          <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
-            <Stack align={'center'}>
-              <Heading fontSize={'4xl'} textAlign={'center'}>
+      style={{overflow: 'hidden'}}>
+      <Stack spacing={8} maxW={'lg'} style={{minHeight: '100vh'}}>
+        <Stack align={'center'}>
+          <Heading fontSize={'4xl'} textAlign={'center'}>
+            Sign up
+          </Heading>
+          <Text fontSize={'lg'} color={'gray.600'}>
+            Selamat Datang di <Box as="span" align="center" color={"green"}>Prakarsa Hijau</Box>
+          </Text>
+        </Stack>
+        <Box
+          rounded={'lg'}
+          bg={useColorModeValue('white', 'gray.700')}
+          boxShadow={'lg'}
+          p={8}>
+          <form onSubmit={handleRegister}>
+          <Stack spacing={4}>
+            <HStack>
+              <Box>
+                <FormControl id="firstName" isRequired>
+                  <FormLabel>First Name</FormLabel>
+                  <Input type="text" 
+                    className='form-control'
+                    placeholder='Nama depan'
+                    value={fName}
+                    onChange={(e) => setFName(e.target.value)}/>
+                </FormControl>
+              </Box>
+              <Box>
+                <FormControl id="lastName">
+                  <FormLabel>Last Name</FormLabel>
+                  <Input type="text" 
+                  className='form-control'
+                  placeholder='Nama belakang'
+                  value={lName}
+                  onChange={(e) => setLName(e.target.value)}/>
+                </FormControl>
+              </Box>
+            </HStack>
+            <FormControl id="email" isRequired>
+              <FormLabel>Email address</FormLabel>
+              <Input type="email" 
+                className='form-control'
+                placeholder='Masukkan Email Anda...'
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </FormControl>
+            <FormControl id="password" isRequired>
+              <FormLabel>Password</FormLabel>
+              <InputGroup>
+                <Input type={showPassword ? 'text' : 'password'} 
+                  className='form-control'
+                  placeholder='Masukkan Password Anda...'
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+                <InputRightElement h={'full'}>
+                  <Button
+                    variant={'ghost'}
+                    onClick={() =>
+                      setShowPassword((showPassword) => !showPassword)
+                    }>
+                    {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                  </Button>
+                </InputRightElement>
+              </InputGroup>
+            </FormControl>
+            <Stack spacing={10}>
+              <Button
+                type='submit'
+                loadingText="Submitting"
+                size="lg"
+                bg={'blue.400'}
+                color={'white'}
+                _hover={{
+                  bg: 'blue.500',
+                }}>
                 Sign up
               </Heading>
               <Text fontSize={'lg'} color={'gray.600'}>
                 Selamat Datang di <Box as="span" align="center" color={"green"}>Prakarsa Hijau</Box>
               </Text>
             </Stack>
-            <Box
-              rounded={'lg'}
-              bg={useColorModeValue('white', 'gray.700')}
-              boxShadow={'lg'}
-              p={8}
-            >
-              <form onSubmit={handleRegister}>
-                <Stack spacing={4}>
-                  <HStack>
-                    <Box>
-                      <FormControl id="firstName" isRequired>
-                        <FormLabel>First Name</FormLabel>
-                        <Flex align="center">
-                          <Icon as={FaUser} color="gray.400" />
-                          <Input
-                            type="text"
-                            className='form-control'
-                            placeholder='Nama depan'
-                            value={fName}
-                            onChange={(e) => setFName(e.target.value)}
-                          />
-                        </Flex>
-                      </FormControl>
-                    </Box>
-                    <Box>
-                      <FormControl id="lastName">
-                        <FormLabel>Last Name</FormLabel>
-                        <Flex align="center">
-                          <Icon as={FaUser} color="gray.400" />
-                          <Input
-                            type="text"
-                            className='form-control'
-                            placeholder='Nama belakang'
-                            value={lName}
-                            onChange={(e) => setLName(e.target.value)}
-                          />
-                        </Flex>
-                      </FormControl>
-                    </Box>
-                  </HStack>
-                  <FormControl id="email" isRequired>
-                    <FormLabel>Email address</FormLabel>
-                    <Flex align="center">
-                      <Icon as={FaEnvelope} color="gray.400" />
-                      <Input
-                        type="email"
-                        className='form-control'
-                        placeholder='Masukkan Email Anda...'
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                      />
-                    </Flex>
-                  </FormControl>
-                  <FormControl id="password" isRequired>
-                    <FormLabel>Password</FormLabel>
-                    <InputGroup>
-                      <Flex align="center" width="100%">
-                        <Icon as={FaLock} color="gray.400" />
-                        <Input
-                          type={showPassword ? 'text' : 'password'}
-                          className='form-control'
-                          placeholder='Masukkan Password Anda...'
-                          value={password}
-                          onChange={(e) => setPassword(e.target.value)}
-                          flex="1"
-                        />
-                        <InputRightElement h={'full'}>
-                          <Button
-                            variant={'ghost'}
-                            onClick={() =>
-                              setShowPassword((showPassword) => !showPassword)
-                            }>
-                            {showPassword ? <ViewIcon /> : <ViewOffIcon />}
-                          </Button>
-                        </InputRightElement>
-                      </Flex>
-                    </InputGroup>
-                  </FormControl>
-                  <Stack spacing={10}>
-                    <Button
-                      type='submit'
-                      bg={'blue.400'}
-                      color={'white'}
-                      _hover={{
-                        bg: 'blue.500',
-                      }}
-                    >
-                      Sign up
-                    </Button>
-                  </Stack>
-                  <Stack>
-                    <Box textAlign={'center'}>
-                      Already a user? <ChakraLink as={ReactRouterLink} color={'blue.400'} to="/login">Login</ChakraLink>
-                    </Box>
-                  </Stack>
-                </Stack>
-              </form>
+            <Stack>
+            <Box textAlign={'center'}>
+              Already a user? <ChakraLink as={ReactRouterLink} color={'blue.400'} to="/login">Login</ChakraLink>
             </Box>
           </Stack>
         </Flex>

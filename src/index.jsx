@@ -3,12 +3,10 @@ import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { ChakraProvider, extendTheme } from '@chakra-ui/react';
 import { BrowserRouter } from 'react-router-dom';
-// import { store } from './redux/index.js';
-// import { Provider } from 'react-redux';
-// import LoadingBar  from 'react-redux-loading-bar';
 import { StrictMode } from 'react';
 import { Routers } from './routes/Routes.jsx';
 import { ToastContainer } from 'react-toastify';
+import { AuthProvider } from './utils/context/AuthContext.jsx';
 
 const theme = extendTheme ({
     styles: {
@@ -22,16 +20,14 @@ const theme = extendTheme ({
 
 createRoot(document.getElementById('root')).render(
     <StrictMode>
-    {/* <Provider store={store}> */}
+      <AuthProvider>
       <BrowserRouter>
         <ChakraProvider theme={theme}>
-          {/* <LoadingBar /> */}
-
           <Routers>
             <ToastContainer />
           </Routers>
         </ChakraProvider>
       </BrowserRouter>
-    {/* </Provider> */}
+      </AuthProvider>
   </StrictMode>,
 )
