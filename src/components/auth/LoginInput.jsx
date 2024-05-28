@@ -18,16 +18,19 @@ import {
 } from '@chakra-ui/react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+
+import { useNavigate} from 'react-router-dom';
 import { useState } from 'react';
 import { signInWithEmailAndPassword} from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
 import { FaEnvelope, FaLock } from 'react-icons/fa'; // Import envelope and lock icons
 
 export const LoginInput = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [isLoading, setLoading] = useState(false);
+
+const [ email, setEmail ] = useState('');
+const [ password, setPassword ] = useState('');
+const [ isLoading, setLoading] = useState(false);
+
 
   const toast = useToast();
   const navigate = useNavigate();
