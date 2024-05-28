@@ -14,7 +14,7 @@ export const ListTips = () => {
             setLoading(true);
             const tipsCollection = collection(db, 'tips');
             const tipsSnapshot = await getDocs(tipsCollection);
-            const tipsList = tipsSnapshot.docs.map(doc => doc.data());
+            const tipsList = tipsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
             setTips(tipsList);
             setLoading(false);
         };
@@ -33,7 +33,7 @@ export const ListTips = () => {
     return (
         <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6}>
             {tips.map((tip, index) => (
-                <ItemTips key={index} tip={tip} />
+                <ItemTips key={index} id={tip.id} tip={tip} />
             ))}
         </Grid>
     );
