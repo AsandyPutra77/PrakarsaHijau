@@ -26,7 +26,6 @@ export const ArticleDetailCard = () => {
       }, [id]);
 
     if (loading) {
-
         return <Loading />;
       }
 

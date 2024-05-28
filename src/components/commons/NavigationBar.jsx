@@ -58,11 +58,13 @@ export const NavBar = () => {
                         Article
                     </LinkOverlay>
                 </LinkBox>
+                {userDetails?.role !== 'normal' && (
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
                     <LinkOverlay as={Link} to='/contribute'>
                         Contribute
                     </LinkOverlay>
                 </LinkBox>
+    )}
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
                     <LinkOverlay as={Link} to='/about'>
                         About Us
