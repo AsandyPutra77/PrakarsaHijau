@@ -1,4 +1,4 @@
-import { Box, Flex, Image, HStack, Button, Spacer, Text, Avatar} from "@chakra-ui/react"
+import { Box, Flex, HStack, Button, Spacer, Text, Avatar, LinkBox, LinkOverlay} from "@chakra-ui/react"
 import { Link } from "react-router-dom"
 import { auth, db } from "../../firebase/firebase"
 import { useState, useEffect} from "react"
@@ -43,25 +43,31 @@ export const NavBar = () => {
             <Flex>
                 <Text m="10px">PrakarsaHijau</Text>
             <HStack spacing="24px" ml="20%">
-                <Box>
-                    <Link to='/landing'>
+                <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
+                    <LinkOverlay as={Link} to='/landing'>
                         Home
-                    </Link>
-                </Box>
-                <Box>
-                    Tips
-                </Box>
-                <Box>
-                    <Link to='/article'>
+                    </LinkOverlay>
+                </LinkBox>
+                <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
+                    <LinkOverlay as={Link} to='/tips'>
+                        Tips
+                    </LinkOverlay>
+                </LinkBox>
+                <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
+                    <LinkOverlay as={Link} to='/article'>
                         Article
-                    </Link>
-                </Box>
-                <Box>
-                    Contribute
-                </Box>
-                <Box>
-                    About Us
-                </Box>
+                    </LinkOverlay>
+                </LinkBox>
+                <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
+                    <LinkOverlay as={Link} to='/contribute'>
+                        Contribute
+                    </LinkOverlay>
+                </LinkBox>
+                <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
+                    <LinkOverlay as={Link} to='/about'>
+                        About Us
+                    </LinkOverlay>
+                </LinkBox>
             </HStack>
             <Spacer/>
             <HStack>
@@ -69,13 +75,13 @@ export const NavBar = () => {
                 size="sm" 
                 mr="10px"
                 onClick={handleLogout}
+                _hover={{ bg: 'red' }}
                 >Log Out</Button>
             <Link to='/profile'>
                 <Avatar name={userName} src='https://bit.ly/broken-link' />
             </Link>
             </HStack>
             </Flex>
-
         </Box>
     )
 }

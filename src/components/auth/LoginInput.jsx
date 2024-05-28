@@ -13,15 +13,16 @@ import {
   useToast
 } from '@chakra-ui/react';
 
-import {Link as ReactRouterLink } from 'react-router-dom';
+import { Link as ReactRouterLink } from 'react-router-dom';
 import { useNavigate} from 'react-router-dom';
 import { useState } from 'react';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword} from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
 
 export const LoginInput = () => {
 const [ email, setEmail ] = useState('');
 const [ password, setPassword ] = useState('');
+const [ isLoading, setLoading] = useState(false);
 
 const toast = useToast();
 
@@ -29,6 +30,7 @@ const navigate = useNavigate();
 
 const handleSubmit = async (e) => {
   e.preventDefault();
+  setLoading(true);
   try {
     await signInWithEmailAndPassword(auth, email, password);
     console.log("User Logged In Successfully !");
@@ -36,20 +38,22 @@ const handleSubmit = async (e) => {
       title: 'Login successful.',
       description: "You've successfully logged in.",
       status: 'success',
-      duration: 4000,
+      duration: 2000,
       isClosable: true,
       onCloseComplete: () => navigate('/landing')
     })
 
   } catch (error) {
-    console.log(error.message)
+    // Display the error message to the user
     toast({
       title: 'Login failed.',
-      description: "Email or password is incorrect.",
+      description: error.message,
       status: 'error',
       duration: 9000,
       isClosable: true,
     })
+  } finally {
+    setLoading(false);
   }
 }
   
@@ -92,22 +96,14 @@ return (
                />
           </FormControl>
           <Stack spacing={10}>
-            <Stack
-              direction={{ base: 'column', sm: 'row' }}
-              align={'start'}
-              justify={'space-between'}>
-              <Button colorScheme="red" w={'full'} onClick={() => {/* Add your Google sign-in logic here */}}>
-                Sign in with Google 🌍
-              </Button>
-            </Stack>
             <Button
               type='submit'
               bg={'blue.400'}
               color={'white'}
-              //onClick={ () => navigate('/landing')}
               _hover={{
                 bg: 'blue.500',
-              }}>
+              }}
+              isLoading= {isLoading}>
               Sign in
             </Button>
           </Stack>

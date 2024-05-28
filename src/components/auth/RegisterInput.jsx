@@ -44,7 +44,8 @@ export const RegisterInput = () => {
         await setDoc(doc(db, 'users', user.uid), {
           email: user.email,
           uid: user.uid,
-          displayName: fName + ' ' + lName
+          displayName: fName + ' ' + lName,
+          role: 'normal'
         }) 
         
       }

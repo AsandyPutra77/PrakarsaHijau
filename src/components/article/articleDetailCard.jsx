@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Heading, Text, Spinner, Image } from '@chakra-ui/react';
+import { Box, Heading, Text, Spinner, Image, Flex} from '@chakra-ui/react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
+import { Loading } from '../helper/Loading';
 
 export const ArticleDetailCard = () => {
     const [article, setArticle] = useState(null);
@@ -26,8 +27,8 @@ export const ArticleDetailCard = () => {
       }, [id]);
 
     if (loading) {
-        return <Spinner />;
-    }
+        return <Loading />;
+      }
 
     if (!article) {
         return <Text>Article not found</Text>;
