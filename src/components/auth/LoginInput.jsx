@@ -18,19 +18,17 @@ import {
 } from '@chakra-ui/react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
-
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import { signInWithEmailAndPassword} from 'firebase/auth';
+import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
 import { FaEnvelope, FaLock } from 'react-icons/fa'; // Import envelope and lock icons
 
 export const LoginInput = () => {
 
-const [ email, setEmail ] = useState('');
-const [ password, setPassword ] = useState('');
-const [ isLoading, setLoading] = useState(false);
-
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isLoading, setLoading] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -72,7 +70,9 @@ const [ isLoading, setLoading] = useState(false);
       <GridItem>
         <Flex align={'center'} justify={'center'} h="100%">
           <Box
-            bg="#C6F6D5"
+            backgroundImage="/assets/bg loginregis.jpg"
+            backgroundSize="cover"
+            backgroundPosition="center"
             width="100%"
             height="100%"
             position="relative"
@@ -140,7 +140,7 @@ const [ isLoading, setLoading] = useState(false);
                     _hover={{
                       bg: 'blue.500',
                     }}
-                    isLoading = {isLoading}
+                    isLoading={isLoading}
                   >
                     Sign in
                   </Button>

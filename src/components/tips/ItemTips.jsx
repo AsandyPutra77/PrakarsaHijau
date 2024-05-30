@@ -18,7 +18,7 @@ export const ItemTips = ({ tip }) => {
         >
             <Image 
                 height="200px"
-                width="435px"
+                width="100%"
                 src={tip.imageUrl} 
                 alt={tip.title} 
                 objectFit="cover"
