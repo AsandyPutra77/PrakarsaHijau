@@ -39,7 +39,7 @@ export const NavBar = () => {
     const userName = userDetails?.displayName;
 
     return (
-        <Box bg="green" w="100%" p={4} color={"white"}>
+        <Box bg="green" w="100%" p={4} color={"white"} position="fixed" zIndex="1000">
             <Flex>
                 <Text m="10px">PrakarsaHijau</Text>
             <HStack spacing="24px" ml="20%">

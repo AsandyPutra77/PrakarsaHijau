@@ -9,7 +9,7 @@ import { ArticleDetail } from "../pages/article/ArticleDetails";
 import { Tips } from "../pages/tips/Tips";
 import { TipsForm } from "../pages/tips/TipsForm";
 import { ProtectedRoute } from "../utils/ProtectedRoute";
-import { DetailTips } from "../components/tips/DetailTips";
+import { DetailTipsPage } from "../pages/tips/DetailTipsPage";
 
 export const Routers = () => {
     return (
@@ -19,7 +19,7 @@ export const Routers = () => {
             <Route path="/login" element={<Login />}/>
             <Route path="/*" element={'/*NotFoundPage*/'}/>
             <Route path="/tips" element={<Tips />}/>
-            <Route path="/tips/:id" element={<DetailTips />}/>
+            <Route path="/tips/:id" element={<DetailTipsPage />}/>
             {ProtectedRoute("/contribute", <TipsForm />)}
             <Route path="/landing" element={<Landing />} />
             <Route path="/profile" element={<Profile />} />

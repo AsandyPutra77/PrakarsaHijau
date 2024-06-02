@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Box, Heading, Text, Image, Tag, TagLabel, TagRightIcon } from '@chakra-ui/react';
+import { Box, Heading, Text, Image, Tag, TagLabel, TagRightIcon, Flex, Button } from '@chakra-ui/react';
 import { IoIosPricetags } from "react-icons/io";
+import { ArrowBackIcon } from '@chakra-ui/icons';
 import { db } from '../../firebase/firebase';
 import { doc, getDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
+import { Loading } from '../helper/Loading';
 
 export const DetailTips = () => {
   const { id } = useParams();
-  const [tip, setTip] = useState(null);
+  const [ tip, setTip ] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTip = async () => {
@@ -29,58 +33,64 @@ export const DetailTips = () => {
   }, [id]);
 
   if (!tip) {
-    return <Text>Loading...</Text>;
+    return <Loading />;
   }
 
   return (
     <Box 
-        m={4} 
-        bg="#FFFFFF" 
+        bg="#08C84F" 
         boxShadow="0px 4px 30px rgba(0, 0, 0, 0.05)" 
-        width="auto" 
-        height="auto"
-        display="flex"
-        flexDirection="column"
-        justifyContent="space-between"
+        borderRadius="lg"
+        overflow="hidden"
+        maxH="80%"
+        maxWidth="800px"
+        mt={10}
+        mx="auto"
     >
+        <Button 
+            leftIcon={<ArrowBackIcon />} 
+            color="#E2E51A" 
+            variant="outline" 
+            mt={4}
+            ms={4}
+            mb={4} 
+            onClick={() => navigate('/tips')}
+          >
+            Back to Tips
+        </Button>
         <Image 
-            height="500px"
+            height="400px"
             width="100%"
             src={tip.imageUrl} 
             alt={tip.title} 
             objectFit="cover"
         />
 
-        <Box 
-            display="flex" 
-            flexDirection="column" 
-            alignItems="stretch" 
-            padding="20px" 
-            gap="24px"
-            flex='1'
+        <Flex 
+            direction="column" 
+            p="5"
         >
             <Heading 
                 fontFamily="'Inter'" 
                 fontWeight="600" 
-                fontSize="20px" 
-                lineHeight="30px" 
-                color="#101828"
+                fontSize="2xl" 
+                mb="2"
             >
                 {tip.title}
             </Heading>
 
-            <Tag size='md' variant='outline' colorScheme='blue' maxWidth="fit-content" whiteSpace="nowrap">
+            <Tag size='md' variant='solid' bg="#6ED840" color="#FFFFFF" maxWidth="fit-content" whiteSpace="nowrap" mb="4">
                 <TagLabel>#{tip.tag}</TagLabel>
                 <TagRightIcon as={IoIosPricetags} />
             </Tag>
 
             <Text 
                 fontFamily="'Inter'"
-                flex='1'
+                fontSize="md"
             >
                 {tip.description}
             </Text>
-        </Box>
+        </Flex>
     </Box>
   );
 }
