@@ -8,6 +8,8 @@ import { Routers } from './routes/Routes.jsx';
 import { ToastContainer } from 'react-toastify';
 import { AuthProvider } from './utils/context/AuthContext.jsx';
 
+import './styles/index.css';
+
 const theme = extendTheme ({
     styles: {
         global: {

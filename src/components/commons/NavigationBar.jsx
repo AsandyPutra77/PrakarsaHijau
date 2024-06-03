@@ -1,5 +1,5 @@
 import { Box, Flex, HStack, Button, Spacer, Text, Avatar, LinkBox, LinkOverlay} from "@chakra-ui/react"
-import { Link } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 import { auth, db } from "../../firebase/firebase"
 import { useState, useEffect} from "react"
 import { doc, getDoc } from 'firebase/firestore';
@@ -39,34 +39,34 @@ export const NavBar = () => {
     const userName = userDetails?.displayName;
 
     return (
-        <Box bg="green" w="100%" p={4} color={"white"} position="fixed" zIndex="1000">
+        <Box bg="#146E5F" w="100%" p={4} color={"white"} position="fixed" zIndex="1000">
             <Flex>
                 <Text m="10px">PrakarsaHijau</Text>
             <HStack spacing="24px" ml="20%">
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
-                    <LinkOverlay as={Link} to='/landing'>
+                    <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/landing'>
                         Home
                     </LinkOverlay>
                 </LinkBox>
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
-                    <LinkOverlay as={Link} to='/tips'>
+                    <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/tips'>
                         Tips
                     </LinkOverlay>
                 </LinkBox>
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
-                    <LinkOverlay as={Link} to='/article'>
+                    <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/article'>
                         Article
                     </LinkOverlay>
                 </LinkBox>
                 {userDetails?.role !== 'normal' && (
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
-                    <LinkOverlay as={Link} to='/contribute'>
+                    <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/contribute'>
                         Contribute
                     </LinkOverlay>
                 </LinkBox>
     )}
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
-                    <LinkOverlay as={Link} to='/about'>
+                    <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/about'>
                         About Us
                     </LinkOverlay>
                 </LinkBox>
@@ -79,9 +79,9 @@ export const NavBar = () => {
                 onClick={handleLogout}
                 _hover={{ bg: 'red' }}
                 >Log Out</Button>
-            <Link to='/profile'>
+            <NavLink to='/profile'>
                 <Avatar name={userName} src='https://bit.ly/broken-link' />
-            </Link>
+            </NavLink>
             </HStack>
             </Flex>
         </Box>

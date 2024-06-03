@@ -10,6 +10,7 @@ import { Tips } from "../pages/tips/Tips";
 import { TipsForm } from "../pages/tips/TipsForm";
 import { ProtectedRoute } from "../utils/ProtectedRoute";
 import { DetailTipsPage } from "../pages/tips/DetailTipsPage";
+import { AboutUsPage } from "../pages/about/AboutUsPage";
 
 export const Routers = () => {
     return (
@@ -25,6 +26,7 @@ export const Routers = () => {
             <Route path="/profile" element={<Profile />} />
             <Route path="/article" element={<Article />} />
             <Route path="/article/:id" element={<ArticleDetail />}/>
+            <Route path="/about" element={<AboutUsPage />} />
         </Routes>
     )
 }
