@@ -31,15 +31,6 @@ export const ItemTips = ({ tip }) => {
             justifyContent="space-between"
             borderRadius="md"
         >
-<<<<<<< HEAD
-            <Image 
-                height="200px"
-                width="100%"
-                src={tip.imageUrl} 
-                alt={tip.title} 
-                objectFit="cover"
-            />
-=======
             <HStack spacing={4} padding={4} bg="#6ED840" borderTopLeftRadius="md" borderTopRightRadius="md">
                 <Avatar 
                     size="lg"
@@ -77,7 +68,6 @@ export const ItemTips = ({ tip }) => {
                     objectFit="cover"
                 />
             </Box>
->>>>>>> 77e6477221e5ccee355b97fbc7e958fbc4f1b577
 
             <Box 
                 display="flex" 
