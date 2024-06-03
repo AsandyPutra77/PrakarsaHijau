@@ -72,7 +72,8 @@ const [ isLoading, setLoading] = useState(false);
       <GridItem>
         <Flex align={'center'} justify={'center'} h="100%">
           <Box
-            bg="#C6F6D5"
+            backgroundImage="url('../public/assets/authBg.png')"
+            objectFit={'cover'}
             width="100%"
             height="100%"
             position="relative"
