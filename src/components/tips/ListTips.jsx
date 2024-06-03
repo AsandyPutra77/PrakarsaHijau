@@ -31,7 +31,7 @@ export const ListTips = () => {
     }
 
     return (
-        <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6}>
+        <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6} mt={10}>
             {tips.map((tip, index) => (
                 <ItemTips key={index} id={tip.id} tip={tip} />
             ))}

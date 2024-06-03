@@ -1,56 +1,69 @@
-import {
-    Flex,
-    Button,
-    Text,
-    VStack,
-    useBreakpointValue,
-  } from '@chakra-ui/react';
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
+export const Hero = () => {
+  const Navigate = useNavigate();
   
-  export const Hero = () => {
-    return (
-      <Flex
-        w={'full'}
-        h={'400'}
-        backgroundImage={
-          'url(https://images.unsplash.com/photo-1600267175161-cfaa711b4a81?ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80)'
-        }
-        backgroundSize={'cover'}
-        backgroundPosition={'center center'}
-        justify={'center'}
-        align={'center'}
-        bgGradient={'linear(to-r, blackAlpha.600, transparent)'}>
-        <VStack
-          maxW={'2xl'}
-          align={'flex-start'}
-          spacing={6}
-          px={useBreakpointValue({ base: 4, md: 8 })}
-          textAlign={'left'}>
-          <Text
-            color={'white'}
-            fontWeight={700}
-            lineHeight={1.2}
-            fontSize={useBreakpointValue({ base: '3xl', md: '4xl' })}>
-            Lorem ipsum dolor sit amet consectetur adipiscing elit sed do
-            eiusmod tempor
-          </Text>
-          <Flex gap={4}>
-            <Button
-              bg={'blue.400'}
-              rounded={'full'}
-              color={'white'}
-              _hover={{ bg: 'blue.500' }}>
-              Show me more
-            </Button>
-            <Button
-              bg={'whiteAlpha.300'}
-              rounded={'full'}
-              color={'white'}
-              _hover={{ bg: 'whiteAlpha.500' }}>
-              Show me more
-            </Button>
-          </Flex>
-        </VStack>
-      </Flex>
-    );
+  const fadeIn = {
+      initial: { opacity: 0 , y: 60},
+      animate: { opacity: 1 , y: 0},
+  }
+
+  const fadeInRight = {
+    initial: { opacity: 0 , x: -60},
+    animate: { opacity: 1 , x: 0},
   }
   
+    return (
+     <section className="flex flex-row w-full h-screen bg-cover bg-[url('/assets/bg.png')]">
+        <div className="flex mx-40 my-20 ">
+          <motion.div
+            className='flex justify-center items-center my-14'
+            variants={fadeIn}
+            initial="initial"
+            animate="animate"
+            transition={{ duration: 2 }}
+          >
+            <img src="/assets/Group 1.png" alt="Group1" />
+          </motion.div>
+        </div>
+        <div className=" mr-40 mt-80 ">
+          <div className="flex flex-col">
+            <h2 className="flex text-5xl text-[#11DCC6] font-semibold whitespace-nowrap mb-2">
+              <motion.h2
+                variants={fadeInRight}
+                initial="initial"
+                animate="animate"
+                transition={{ duration: 2 }}>
+              Green Economy
+              </motion.h2>
+              
+              </h2>
+            <h5 className="flex text-2xl text-[#FFFFFF] font-semibold whitespace-nowrap">Masa Depan Sehat Untuk <br />Bumi dan Manusia</h5>
+          </div>
+          <div className="flex flex-row mt-4">
+            <motion.button
+              className="bg-[#00A742] border-[#00A742] text-white font-semibold px-10 py-2 border rounded-3xl mr-4 hover:bg-[#136C59] hover:border-[#136C59]"
+              onClick={() => Navigate('/tips')}
+              variants={fadeIn}
+              initial="initial"
+              animate="animate"
+              transition={{ duration: 2 }}
+            >
+              Tips
+            </motion.button>
+            <motion.button
+              className="bg-[#136C59] border-[#136C59] text-white font-semibold px-10 py-2 border rounded-3xl mr-4 hover:bg-[#00A742] hover:border-[#00A742]"
+              onClick={() => Navigate('/article')}
+              variants={fadeIn}
+              initial="initial"
+              animate="animate"
+              transition={{ duration: 2 }}
+            >
+              News
+            </motion.button>
+          </div>
+        </div>
+     </section>
+  );
+}
