@@ -1,6 +1,6 @@
 import React from "react";
 import { Input, Button, Text, Flex, Box, Tooltip, IconButton, Textarea, useToast} from "@chakra-ui/react";
-import { InfoOutlineIcon } from "@chakra-ui/icons";
+import { InfoOutlineIcon, ArrowBackIcon, AddIcon} from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import { auth, db, storage } from "../../../firebase/firebase";
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
@@ -21,6 +21,10 @@ export const TipsInput = () => {
             setImage(e.target.files[0]);
         }
     };
+
+    const handleBack = () => {
+        navigate(-1);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
@@ -148,7 +152,10 @@ export const TipsInput = () => {
                         onChange={handleImageChange}
                         mb={3} p={5} h='auto'
                     />
-                    <Button colorScheme="green" type="submit">
+                    <Button leftIcon={<ArrowBackIcon />} colorScheme="green" onClick={handleBack} mr={4}>
+                        Back
+                    </Button>
+                    <Button rightIcon={<AddIcon />} colorScheme="green" type="submit">
                         Add Tips
                     </Button>
                 </form>
