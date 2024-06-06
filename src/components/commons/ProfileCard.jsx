@@ -94,7 +94,7 @@ export const ProfileCard = () => {
           </Tag>
           <HStack align={'center'}>
             <MdVolunteerActivism style={{alignSelf: "center", marginBottom: 8}}/> 
-          <Text fontSize="md" mb={2}><strong>Total Contribution:</strong> {userDetails.totalTips || "209"}</Text>
+          <Text fontSize="md" mb={2}><strong>Total Contribution:</strong> {userDetails.totalTips || "0"}</Text>
           </HStack>
           <Box bg="lightgray" p={2} borderRadius="md">
             <Text fontSize="md" mb={2}>{userDetails.aboutMe || 'Deskripsikan dirimu !'}</Text>
