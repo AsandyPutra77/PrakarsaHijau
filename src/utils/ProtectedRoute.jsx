@@ -13,3 +13,15 @@ export const ProtectedRoute = (path, element) => {
     } />
   );
 };
+
+export const ProtectedAdminRoute = (path, element) => {
+  const { currentUser } = useContext(AuthContext);
+
+  return (
+    <Route path={path} element={
+      currentUser && currentUser.role === 'admin'
+        ? element
+        : <Navigate to="/landing" />
+    } />
+  );
+}
