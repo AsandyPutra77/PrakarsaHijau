@@ -90,7 +90,7 @@ export const RegisterInput = () => {
       <GridItem>
         <Flex align={'center'} justify={'center'} h="100%">
           <Box
-            bgImage="url('../public/assets/authBg.png')"
+            bgImage="url('../assets/authBg.png')"
             bgRepeat="no-repeat"
             width="100%"
             height="100%"
