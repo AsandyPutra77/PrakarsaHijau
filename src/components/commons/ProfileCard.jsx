@@ -69,7 +69,7 @@ export const ProfileCard = () => {
       <Box gridArea="user" bg="#ffffff" color="#333" borderRadius="lg" m={4} p={5} boxShadow="2xl" mt='auto' mb={8} w="600px">
         <Heading mb={4} fontSize="2xl" textAlign="center">Profile</Heading>
         <VStack spacing={3} align="center" >
-          <Avatar size="2xl" name={userDetails.displayName} src={userDetails.avatar || 'https://bit.ly/dan-abramov'}>
+          <Avatar size="2xl" name={userDetails.displayName} src={userDetails.avatar || 'https://bit.ly/broken-link'}>
             {userDetails.totalTips >=  totalContributor && <AvatarBadge as={IoTrophySharp} boxSize="1.0em" color="gold" borderWidth='0px'/>}
           </Avatar>
           <HStack mt={4}>
