@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { auth, db, storage } from "../../../firebase/firebase";
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { updateDoc, doc } from 'firebase/firestore';
 import { useNavigate } from "react-router-dom";
 
 export const TipsInput = () => {
@@ -13,6 +14,7 @@ export const TipsInput = () => {
     const [tips, setTips] = useState([]);
     const [tag, setTag] = useState("");
     const [image, setImage] = useState(null); 
+    const [ totalTips, setTotalTips ] = useState(0);
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -88,6 +90,12 @@ export const TipsInput = () => {
             try {
                 const docRef = await addDoc(collection(db, 'tips'), tip);
                 console.log("Document written with ID: ", docRef.id);
+                setTotalTips(totalTips + 1);
+
+                const userDoc = doc(db, 'users', uid);
+                await updateDoc(userDoc, {
+                    totalTips: totalTips + 1
+                });
                 toast({
                     title: "Success.",
                     description: "Tip added successfully.",

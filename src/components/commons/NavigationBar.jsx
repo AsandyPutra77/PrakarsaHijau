@@ -88,7 +88,7 @@ export const NavBar = () => {
                 _hover={{ bg: 'red' }}
                 >Log Out</Button>
             <NavLink to='/profile'>
-                <Avatar name={userName} src='https://bit.ly/broken-link' />
+                <Avatar name={userName} src={ userDetails.avatar || 'https://bit.ly/broken-link' }/>
             </NavLink>
             </HStack>
             </Flex>
