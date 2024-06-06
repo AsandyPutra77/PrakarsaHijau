@@ -9,9 +9,11 @@ import { ArticleDetail } from "../pages/article/ArticleDetails";
 import { Tips } from "../pages/tips/Tips";
 import { TipsForm } from "../pages/tips/TipsForm";
 import { ProtectedRoute } from "../utils/ProtectedRoute";
+import { ProtectedAdminRoute } from "../utils/ProtectedRoute";
 import { DetailTipsPage } from "../pages/tips/DetailTipsPage";
 import { AboutUsPage } from "../pages/about/AboutUsPage";
 import { EditProfilePage } from "../pages/profile/EditProfilePage";
+import { RequestPage } from "../pages/admin/RequestPage";
 
 export const Routers = () => {
     return (
@@ -23,6 +25,7 @@ export const Routers = () => {
             <Route path="/tips" element={<Tips />}/>
             <Route path="/tips/:id" element={<DetailTipsPage />}/>
             {ProtectedRoute("/contribute", <TipsForm />)}
+            {ProtectedAdminRoute("/request-role", <RequestPage />)}
             <Route path="/landing" element={<Landing />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/edit-profile" element={<EditProfilePage />} />

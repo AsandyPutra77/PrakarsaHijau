@@ -72,12 +72,19 @@ export const NavBar = () => {
                         Contribute
                     </LinkOverlay>
                 </LinkBox>
-    )}
+                )}
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
                     <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/about'>
                         About Us
                     </LinkOverlay>
                 </LinkBox>
+                {userDetails?.role !== 'normal' && (
+                <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
+                    <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/request-role'>
+                        Request
+                    </LinkOverlay>
+                </LinkBox>
+                )}
             </HStack>
             <Spacer/>
             <HStack>

@@ -29,16 +29,14 @@ export const Hero = () => {
         </div>
         <div className=" mr-40 mt-80 ">
           <div className="flex flex-col">
-            <h2 className="flex text-5xl text-[#11DCC6] font-semibold whitespace-nowrap mb-2">
-              <motion.h2
-                variants={fadeInRight}
-                initial="initial"
-                animate="animate"
-                transition={{ duration: 2 }}>
-              Green Economy
-              </motion.h2>
-              
-              </h2>
+            <motion.h2
+              className="flex text-5xl text-[#11DCC6] font-semibold whitespace-nowrap mb-2"
+              variants={fadeInRight}
+              initial="initial"
+              animate="animate"
+              transition={{ duration: 2 }}>
+            Green Economy
+            </motion.h2>
             <h5 className="flex text-2xl text-[#FFFFFF] font-semibold whitespace-nowrap">Masa Depan Sehat Untuk <br />Bumi dan Manusia</h5>
           </div>
           <div className="flex flex-row mt-4">
