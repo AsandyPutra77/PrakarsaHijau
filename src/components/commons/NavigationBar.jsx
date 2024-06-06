@@ -78,7 +78,7 @@ export const NavBar = () => {
                         About Us
                     </LinkOverlay>
                 </LinkBox>
-                {userDetails?.role !== 'normal' && 'advance' && (
+                {userDetails?.role !== 'normal' && userDetails?.role !== 'advance' && (
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
                     <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/request-role'>
                         Request

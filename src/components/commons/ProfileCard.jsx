@@ -76,6 +76,7 @@ export const ProfileCard = () => {
           <Text fontSize="xl" mb={2}><strong>{userDetails.displayName}</strong></Text>
           <IconButton aria-label="Edit Profile" mb={1} variant={'outline'} icon={<CiEdit />} onClick={() => navigate('/edit-profile')} />
           </HStack>
+          <HStack>
            {userDetails.totalTips >= totalContributor && 
               <Badge colorScheme='green'>
                 <Flex justifyContent="space-between" width="100%">
@@ -84,14 +85,15 @@ export const ProfileCard = () => {
                 </Flex>
               </Badge>
             }
+            <Tag size="md">
+              <TagRightIcon boxSize="12px" as={FaBriefcase}  mr={2}/>
+              {userDetails.title} 
+            </Tag>
+          </HStack>
           <HStack spacing={2}>
             <MdMarkEmailRead size="20px" style={{alignSelf: "center", marginBottom: 4}}/>
             <Text fontSize="md" mb={2}>{userDetails.email}</Text>
           </HStack>
-          <Tag size="md" mb={2}>
-          <TagRightIcon boxSize="12px" as={FaBriefcase}  mr={2}/>
-            {userDetails.title}
-          </Tag>
           <HStack align={'center'}>
             <MdVolunteerActivism style={{alignSelf: "center", marginBottom: 8}}/> 
           <Text fontSize="md" mb={2}><strong>Total Contribution:</strong> {userDetails.totalTips || "0"}</Text>
