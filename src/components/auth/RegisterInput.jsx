@@ -27,6 +27,7 @@ import { auth, db } from '../../firebase/firebase';
 import { setDoc, doc } from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { FaUser, FaEnvelope, FaLock } from 'react-icons/fa';
+import { motion } from 'framer-motion';
 
 export const RegisterInput = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -35,11 +36,14 @@ export const RegisterInput = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const [ isLoading, setLoading ] = useState(false);
+
   const navigate = useNavigate();
   const toast = useToast();
 
   const handleRegister = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
       await createUserWithEmailAndPassword(auth, email, password);
       const user = auth.currentUser;
@@ -59,7 +63,10 @@ export const RegisterInput = () => {
         status: 'success',
         duration: 3000,
         isClosable: true,
-        onCloseComplete: () => navigate('/login')
+        onCloseComplete: () => {
+          navigate('/login');
+          setLoading(false);
+        }
       });
     } catch (error) {
       console.log(error.message);
@@ -70,6 +77,7 @@ export const RegisterInput = () => {
         duration: 9000,
         isClosable: true,
       });
+      setLoading(false);
     }
   };
 
@@ -91,13 +99,16 @@ export const RegisterInput = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <Image
-              src="/assets/Group 1.png"
-              alt="Group 1"
-              objectFit="center"
-              w="60%"
-              h="50%"
-            />
+
+            <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <Image
+                src="/assets/Group 1.png"
+                alt="Group 1"
+                objectFit="center"
+                w="auto"
+                h="auto"
+              />
+            </motion.div>
           </Box>
         </Flex>
       </GridItem>
@@ -109,7 +120,7 @@ export const RegisterInput = () => {
                 Sign up
               </Heading>
               <Text fontSize={'lg'} color={'gray.600'}>
-                Selamat Datang di <Box as="span" align="center" color={"green"}>Prakarsa Hijau</Box>
+                Selamat Datang di <Box as="span" align="center" style={{animation: 'colorchange 5s infinite'}}>Prakarsa Hijau</Box>
               </Text>
             </Stack>
             <Box
@@ -125,7 +136,7 @@ export const RegisterInput = () => {
                       <FormControl id="firstName" isRequired>
                         <FormLabel>First Name</FormLabel>
                         <Flex align="center">
-                          <Icon as={FaUser} color="gray.400" />
+                          <Icon as={FaUser} color="gray.400" mr={4}/>
                           <Input
                             type="text"
                             className='form-control'
@@ -140,7 +151,7 @@ export const RegisterInput = () => {
                       <FormControl id="lastName">
                         <FormLabel>Last Name</FormLabel>
                         <Flex align="center">
-                          <Icon as={FaUser} color="gray.400" />
+                          <Icon as={FaUser} color="gray.400" mr={4}/>
                           <Input
                             type="text"
                             className='form-control'
@@ -155,7 +166,7 @@ export const RegisterInput = () => {
                   <FormControl id="email" isRequired>
                     <FormLabel>Email address</FormLabel>
                     <Flex align="center">
-                      <Icon as={FaEnvelope} color="gray.400" />
+                      <Icon as={FaEnvelope} color="gray.400" mr={4}/>
                       <Input
                         type="email"
                         className='form-control'
@@ -169,7 +180,7 @@ export const RegisterInput = () => {
                     <FormLabel>Password</FormLabel>
                     <InputGroup>
                       <Flex align="center" width="100%">
-                        <Icon as={FaLock} color="gray.400" />
+                        <Icon as={FaLock} color="gray.400" mr={4}/>
                         <Input
                           type={showPassword ? 'text' : 'password'}
                           className='form-control'
@@ -198,6 +209,7 @@ export const RegisterInput = () => {
                       _hover={{
                         bg: 'blue.500',
                       }}
+                      isLoading = {isLoading}
                     >
                       Sign up
                     </Button>

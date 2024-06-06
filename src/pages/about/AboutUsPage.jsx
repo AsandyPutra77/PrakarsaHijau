@@ -6,7 +6,6 @@ export const AboutUsPage = () => {
     return (
         <div>
              <NavBar />
-             
              <AboutUs />
         </div>
     )

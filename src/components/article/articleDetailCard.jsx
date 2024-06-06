@@ -46,7 +46,7 @@ export const ArticleDetailCard = () => {
       >
         <Image 
           height="500px"
-          width="100%"
+          width="auto"
           src={article.urlToImage} 
           alt={article.title} 
           objectFit="cover"

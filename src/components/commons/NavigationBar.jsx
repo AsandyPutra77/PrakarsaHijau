@@ -3,10 +3,13 @@ import { NavLink } from "react-router-dom"
 import { auth, db } from "../../firebase/firebase"
 import { useState, useEffect} from "react"
 import { doc, getDoc } from 'firebase/firestore';
+import { Loading } from "../helper/Loading";
 
 export const NavBar = () => {
 
     const [userDetails, setUserDetails] = useState(null);
+    const [loading, setLoading] = useState(true);
+
     const fetchUserDetails = async () => {
     auth.onAuthStateChanged(async (user) => {
       if (user) {
@@ -20,6 +23,7 @@ export const NavBar = () => {
       } else {
         console.log('User is signed out');
       }
+      setLoading(false);
     });
     }
 
@@ -37,6 +41,10 @@ export const NavBar = () => {
     }
 
     const userName = userDetails?.displayName;
+
+    if (loading) {
+        return < Loading />;
+    }
 
     return (
         <Box bg="#146E5F" w="100%" p={4} color={"white"} position="fixed" zIndex="1000">
@@ -80,7 +88,7 @@ export const NavBar = () => {
                 _hover={{ bg: 'red' }}
                 >Log Out</Button>
             <NavLink to='/profile'>
-                <Avatar name={userName} src='https://bit.ly/broken-link' />
+                <Avatar name={userName} src={ userDetails.avatar || 'https://bit.ly/broken-link' }/>
             </NavLink>
             </HStack>
             </Flex>

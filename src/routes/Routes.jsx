@@ -11,6 +11,7 @@ import { TipsForm } from "../pages/tips/TipsForm";
 import { ProtectedRoute } from "../utils/ProtectedRoute";
 import { DetailTipsPage } from "../pages/tips/DetailTipsPage";
 import { AboutUsPage } from "../pages/about/AboutUsPage";
+import { EditProfilePage } from "../pages/profile/EditProfilePage";
 
 export const Routers = () => {
     return (
@@ -24,6 +25,7 @@ export const Routers = () => {
             {ProtectedRoute("/contribute", <TipsForm />)}
             <Route path="/landing" element={<Landing />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/edit-profile" element={<EditProfilePage />} />
             <Route path="/article" element={<Article />} />
             <Route path="/article/:id" element={<ArticleDetail />}/>
             <Route path="/about" element={<AboutUsPage />} />
