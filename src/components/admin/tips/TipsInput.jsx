@@ -1,10 +1,11 @@
 import React from "react";
 import { Input, Button, Text, Flex, Box, Tooltip, IconButton, Textarea, useToast} from "@chakra-ui/react";
-import { InfoOutlineIcon } from "@chakra-ui/icons";
+import { InfoOutlineIcon, ArrowBackIcon, AddIcon} from "@chakra-ui/icons";
 import { useState, useEffect } from "react";
 import { auth, db, storage } from "../../../firebase/firebase";
 import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { updateDoc, doc } from 'firebase/firestore';
 import { useNavigate } from "react-router-dom";
 
 export const TipsInput = () => {
@@ -13,6 +14,7 @@ export const TipsInput = () => {
     const [tips, setTips] = useState([]);
     const [tag, setTag] = useState("");
     const [image, setImage] = useState(null); 
+    const [ totalTips, setTotalTips ] = useState(0);
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -21,6 +23,10 @@ export const TipsInput = () => {
             setImage(e.target.files[0]);
         }
     };
+
+    const handleBack = () => {
+        navigate(-1);
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault(); 
@@ -84,6 +90,12 @@ export const TipsInput = () => {
             try {
                 const docRef = await addDoc(collection(db, 'tips'), tip);
                 console.log("Document written with ID: ", docRef.id);
+                setTotalTips(totalTips + 1);
+
+                const userDoc = doc(db, 'users', uid);
+                await updateDoc(userDoc, {
+                    totalTips: totalTips + 1
+                });
                 toast({
                     title: "Success.",
                     description: "Tip added successfully.",
@@ -148,7 +160,10 @@ export const TipsInput = () => {
                         onChange={handleImageChange}
                         mb={3} p={5} h='auto'
                     />
-                    <Button colorScheme="green" type="submit">
+                    <Button leftIcon={<ArrowBackIcon />} colorScheme="green" onClick={handleBack} mr={4}>
+                        Back
+                    </Button>
+                    <Button rightIcon={<AddIcon />} colorScheme="green" type="submit">
                         Add Tips
                     </Button>
                 </form>

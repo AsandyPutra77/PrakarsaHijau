@@ -22,7 +22,8 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
-import { FaEnvelope, FaLock } from 'react-icons/fa'; // Import envelope and lock icons
+import { FaEnvelope, FaLock } from 'react-icons/fa'; 
+import { motion } from 'framer-motion';
 
 export const LoginInput = () => {
 
@@ -36,6 +37,7 @@ export const LoginInput = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
+  
     try {
       await signInWithEmailAndPassword(auth, email, password);
       console.log("User Logged In Successfully !");
@@ -47,6 +49,7 @@ export const LoginInput = () => {
         isClosable: true,
         onCloseComplete: () => navigate('/landing')
       });
+      setTimeout(() => setLoading(false), 4000); // Set loading to false after 4 seconds
     } catch (error) {
       console.log(error.message);
       toast({
@@ -56,12 +59,12 @@ export const LoginInput = () => {
         duration: 9000,
         isClosable: true,
       });
-    } finally {
-      setLoading(false);
+      setTimeout(() => setLoading(false), 9000); // Set loading to false after 9 seconds
     }
   };
 
   return (
+
     <Grid
       minH={'100vh'}
       templateColumns={{ base: '1fr', md: '1fr 1fr' }}
@@ -85,13 +88,15 @@ export const LoginInput = () => {
             justifyContent="center"
             alignItems="center"
           >
-            <Image
-              src="/assets/Group 1.png"
-              alt="Group 1"
-              objectFit="center"
-              w="60%"
-              h="50%"
-            />
+            <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+              <Image
+                src="/assets/Group 1.png"
+                alt="Group 1"
+                objectFit="center"
+                w="100%"
+                h="100%"
+              />
+            </motion.div>
           </Box>
         </Flex>
       </GridItem>
@@ -115,7 +120,7 @@ export const LoginInput = () => {
                   <FormControl id="email">
                     <FormLabel>Email address</FormLabel>
                     <Flex align="center">
-                      <Icon as={FaEnvelope} color="gray.400" />
+                      <Icon as={FaEnvelope} color="gray.400" mr={4}/>
                       <Input
                         type="email"
                         className='form-control'
@@ -128,7 +133,7 @@ export const LoginInput = () => {
                   <FormControl id="password">
                     <FormLabel>Password</FormLabel>
                     <Flex align="center">
-                      <Icon as={FaLock} color="gray.400" />
+                      <Icon as={FaLock} color="gray.400" mr={4}/>
                       <Input
                         type="password"
                         className='form-control'

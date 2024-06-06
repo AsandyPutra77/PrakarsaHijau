@@ -1,7 +1,7 @@
 import React from "react";
 import { Spinner, Text, Flex } from "@chakra-ui/react";
 
-export const Loading = () => {
+export const Loading = ({ text = "Loading..." }) => {
     return (
         <Flex direction='column' justify="center" align="center" h="100vh">
         <Spinner
@@ -12,7 +12,7 @@ export const Loading = () => {
             size="xl"
         />
         <Text fontSize="xl" fontWeight="bold" color="green.500" mt={4}>
-            Loading...
+            {text || "Loading..."}
         </Text>
         </Flex>
     );

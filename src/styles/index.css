@@ -1,3 +1,12 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes colorchange {
+        0% { color: red; }
+        28% { color: green; }
+        42% { color: blue; }
+        54% { color: indigo; }
+        68% { color: violet; }
+        100% { color: red; }
+  }
