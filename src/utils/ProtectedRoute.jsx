@@ -7,7 +7,7 @@ export const ProtectedRoute = (path, element) => {
 
   return (
     <Route path={path} element={
-      currentUser && currentUser.role === 'advance'
+      currentUser?.role && (currentUser.role === 'advance' || currentUser.role === 'admin')
         ? element
         : <Navigate to="/landing" />
     } />
@@ -19,7 +19,7 @@ export const ProtectedAdminRoute = (path, element) => {
 
   return (
     <Route path={path} element={
-      currentUser && currentUser.role === 'admin'
+      currentUser?.role && currentUser.role === 'admin'
         ? element
         : <Navigate to="/landing" />
     } />

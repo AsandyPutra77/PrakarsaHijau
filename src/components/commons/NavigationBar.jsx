@@ -2,7 +2,7 @@ import { Box, Flex, HStack, Button, Spacer, Text, Avatar, LinkBox, LinkOverlay} 
 import { NavLink } from "react-router-dom"
 import { auth, db } from "../../firebase/firebase"
 import { useState, useEffect} from "react"
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, onSnapshot} from 'firebase/firestore';
 import { Loading } from "../helper/Loading";
 
 export const NavBar = () => {
@@ -10,25 +10,28 @@ export const NavBar = () => {
     const [userDetails, setUserDetails] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    const fetchUserDetails = async () => {
-    auth.onAuthStateChanged(async (user) => {
-      if (user) {
-        const docRef = doc(db, 'users', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserDetails(docSnap.data());
-        } else {
-          console.log('No such document!');
-        }
-      } else {
-        console.log('User is signed out');
-      }
-      setLoading(false);
-    });
-    }
+    const fetchUserDetails = () => {
+        auth.onAuthStateChanged((user) => {
+          if (user) {
+            const userDocRef = doc(db, 'users', user.uid);
+            const unsubscribe = onSnapshot(userDocRef, (doc) => {
+              if (doc.exists()) {
+                setUserDetails(doc.data());
+              } else {
+                console.log('User Sign Out');
+              }
+              setLoading(false);
+            });
+      
+            // Return the unsubscribe function to clean up
+            return unsubscribe;
+          }
+        });
+      };
 
     useEffect (() => {
-        fetchUserDetails()
+        const unsubscribe = fetchUserDetails();
+        unsubscribe && unsubscribe();
     }, [])
 
     const handleLogout = async () => {

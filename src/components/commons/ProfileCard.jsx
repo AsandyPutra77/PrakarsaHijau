@@ -20,35 +20,41 @@ import { MdMarkEmailRead, MdVolunteerActivism} from "react-icons/md";
 import { GiAchievement } from "react-icons/gi";
 import { FaCrown } from "react-icons/fa6";
 import { CiEdit } from "react-icons/ci";
-import { doc, getDoc} from 'firebase/firestore';
+import { doc, onSnapshot} from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { auth, db} from '../../firebase/firebase';
 import { getRemoteConfig, fetchAndActivate, getAll} from 'firebase/remote-config';
 import { useNavigate } from 'react-router-dom';
+import { useRequest } from '../../utils/hooks/useRequest';
 
 
 export const ProfileCard = () => {
 
   const [userDetails, setUserDetails] = useState("");
   const [totalContributor, setTotalContributor] = useState(0);
+  const [, handleRoleUpgrade] = useRequest();
+  const [status, setStatus] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchUserDetails = async () => {
-    auth.onAuthStateChanged(async (user) => {
+  const fetchUserDetails = () => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
-        const docRef = doc(db, 'users', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserDetails(docSnap.data());
-        } else {
-          console.log('No such document!');
-        }
-      } else {
-        console.log('User is signed out');
+        const userDocRef = doc(db, 'users', user.uid);
+        const unsubscribe = onSnapshot(userDocRef, (doc) => {
+          if (doc.exists()) {
+            setUserDetails(doc.data());
+            setStatus(doc.data().status || null);
+          } else {
+            console.log('No such document!');
+          }
+        });
+  
+        // Return the unsubscribe function to clean up
+        return unsubscribe;
       }
     });
-  }
+  };
   
   const fetchRemoteConfig = async () => {
     const remoteConfig2 = getRemoteConfig();
@@ -60,8 +66,12 @@ export const ProfileCard = () => {
   };
 
   useEffect (() => {
-    fetchUserDetails();
+    const unsubscribe = fetchUserDetails();
     fetchRemoteConfig();
+
+    return () => {
+      unsubscribe && unsubscribe();
+    };
   }, []);
 
   return (
@@ -102,11 +112,12 @@ export const ProfileCard = () => {
             <Text fontSize="md" mb={2}>{userDetails.aboutMe || 'Deskripsikan dirimu !'}</Text>
           </Box>
           <Stack direction="row" spacing={4} mt={20} align="center">
-            <Button colorScheme="green" size="md" mt={'auto'}>
-              Upgrade Role
-               &nbsp; <FaCrown color='yellow'/>
+          {status !== 'success' && userDetails.role !== 'admin' && (
+            <Button colorScheme="green" size="md" mt={'auto'} onClick={() => {status === null && userDetails.role !== 'advance' ? handleRoleUpgrade() : null;}} disabled={status !== null || userDetails.role === 'advance'}>
+              {userDetails?.role === 'advance' ? 'Role Upgraded' : (status === null ? 'Upgrade Role' : (status === 'pending' ? 'On Process !, please wait...  ' : 'Role Upgraded'))}
+              &nbsp; {status === null && userDetails.role !== 'advance' && <FaCrown color='yellow'/>}
             </Button>
-
+            )}
           </Stack>
         </VStack>
       </Box>
