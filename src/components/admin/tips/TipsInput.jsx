@@ -78,6 +78,8 @@ export const TipsInput = () => {
             imageUrl: imageUrl,
             uid: uid,
             date: serverTimestamp(),
+            likes: 0,
+            dislikes: 0,
         };
     
         setTips([...tips, { title, description, tag, imageUrl: imageUrl, uid, date: serverTimestamp()}]);

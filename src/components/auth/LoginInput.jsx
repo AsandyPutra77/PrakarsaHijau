@@ -56,7 +56,7 @@ export const LoginInput = () => {
         title: 'Login failed.',
         description: "Email or password is incorrect.",
         status: 'error',
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       });
       setTimeout(() => setLoading(false), 9000); // Set loading to false after 9 seconds

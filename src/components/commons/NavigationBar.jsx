@@ -2,7 +2,7 @@ import { Box, Flex, HStack, Button, Spacer, Text, Avatar, LinkBox, LinkOverlay} 
 import { NavLink } from "react-router-dom"
 import { auth, db } from "../../firebase/firebase"
 import { useState, useEffect} from "react"
-import { doc, getDoc, onSnapshot} from 'firebase/firestore';
+import { doc, onSnapshot} from 'firebase/firestore';
 import { Loading } from "../helper/Loading";
 
 export const NavBar = () => {
@@ -53,7 +53,7 @@ export const NavBar = () => {
         <Box bg="#146E5F" w="100%" p={4} color={"white"} position="fixed" zIndex="1000">
             <Flex>
                 <Text m="10px">PrakarsaHijau</Text>
-            <HStack spacing="24px" ml="20%">
+            <HStack spacing="24px" ml={{ base: "5%", md: "5%", lg: "20%" }}>
                 <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
                     <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/landing'>
                         Home
@@ -98,7 +98,7 @@ export const NavBar = () => {
                 _hover={{ bg: 'red' }}
                 >Log Out</Button>
             <NavLink to='/profile'>
-                <Avatar name={userName} src={ userDetails.avatar || 'https://bit.ly/broken-link' }/>
+                <Avatar name={userName || 'User Guest'}  src={ userDetails.avatar || 'https://bit.ly/broken-link' }/>
             </NavLink>
             </HStack>
             </Flex>
