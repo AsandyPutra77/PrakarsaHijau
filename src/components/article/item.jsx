@@ -3,7 +3,7 @@ import { Box, Heading, Text, Image} from '@chakra-ui/react';
 import { ArrowForwardIcon } from '@chakra-ui/icons'; 
 import { Link } from 'react-router-dom';
 import { Loading } from '../helper/Loading';
-import { fetchHealthArticles } from '../../utils/network'; // Import fungsi fetchHealthArticles dari utilitas jaringan yang telah diperbarui
+import { fetchHealthArticles } from '../../utils/network'; 
 
 export const Article = () => {
   const [articles, setArticles] = useState([]);
@@ -31,7 +31,7 @@ export const Article = () => {
   return (
     <Box 
       display="grid" 
-      gridTemplateColumns="repeat(3, 1fr)" 
+      gridTemplateColumns={{ base: "repeat(1, 1fr)", md: "repeat(2, 1fr)", lg: "repeat(3, 1fr)" }} 
       gap="24px" 
       padding="20px"
     >
