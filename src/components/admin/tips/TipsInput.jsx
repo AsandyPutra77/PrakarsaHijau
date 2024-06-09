@@ -7,14 +7,17 @@ import { addDoc, collection, serverTimestamp } from 'firebase/firestore';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { updateDoc, doc } from 'firebase/firestore';
 import { useNavigate } from "react-router-dom";
+import { Loading } from "../../helper/Loading";
 
 export const TipsInput = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
     const [tips, setTips] = useState([]);
-    const [tag, setTag] = useState("");
+    const [tag, setTag] = useState([]);
     const [image, setImage] = useState(null); 
     const [ totalTips, setTotalTips ] = useState(0);
+    const [ totalComments, setTotalComments ] = useState(0);
+    const [loading, setLoading] = useState(false);
     const toast = useToast();
     const navigate = useNavigate();
 
@@ -41,6 +44,8 @@ export const TipsInput = () => {
             });
             return;
         }
+
+        setLoading(true);
     
         const uid = auth.currentUser.uid;
     
@@ -80,12 +85,13 @@ export const TipsInput = () => {
             date: serverTimestamp(),
             likes: 0,
             dislikes: 0,
+            totalComments: 0,
         };
     
         setTips([...tips, { title, description, tag, imageUrl: imageUrl, uid, date: serverTimestamp()}]);
         setTitle("");
         setDescription("");
-        setTag("");
+        setTag([]);
         setImage(null);
     
         const addDocument = async () => {
@@ -96,7 +102,7 @@ export const TipsInput = () => {
 
                 const userDoc = doc(db, 'users', uid);
                 await updateDoc(userDoc, {
-                    totalTips: totalTips + 1
+                    totalTips: totalTips + 1,
                 });
                 toast({
                     title: "Success.",
@@ -115,6 +121,8 @@ export const TipsInput = () => {
                     duration: 5000,
                     isClosable: true,
                 });
+            } finally {
+                setLoading(false);
             }
         };
 
@@ -124,6 +132,10 @@ export const TipsInput = () => {
     useEffect(() => {
         console.log(tips);
     }, [tips]);
+
+    if (loading) {
+        return <Loading />;
+    }
 
     return (
         <Flex direction="column" align="center" justify="center" h="100vh">
@@ -147,8 +159,8 @@ export const TipsInput = () => {
                     <Input
                         type="text"
                         placeholder="#Tag"
-                        value={tag}
-                        onChange={(e) => setTag(e.target.value)}
+                        value={tag.join(',')}
+                        onChange={(e) => setTag(e.target.value.split(','))}
                         mb={4}
                     />
                     <Textarea

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Heading, Text, Spinner, Image, Flex } from '@chakra-ui/react';
+import { Box, Heading, Text, Image} from '@chakra-ui/react';
 import { ArrowForwardIcon } from '@chakra-ui/icons'; 
 import { Link } from 'react-router-dom';
 import { Loading } from '../helper/Loading';

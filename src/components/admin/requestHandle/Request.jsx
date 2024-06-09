@@ -95,11 +95,11 @@ export const Request = () => {
 
 
   return (
-    <Box p={5} maxWidth="80%" mx="auto">
-      <Text fontSize="2xl" mb={5}>Role Request Overview</Text>
+    <Box p={[2, 4, 5]} maxWidth={["90%", "85%", "80%"]} mx="auto">
+      <Text fontSize={["lg", "xl", "2xl"]} mb={5}>Role Request Overview</Text>
       <Box overflowX="auto">
         <TableContainer>
-          <Table variant="striped" colorScheme="green" size="md" border='1px solid' borderColor="gray.500" borderRadius="md">
+          <Table variant="striped" colorScheme="green" size="sm" border='1px solid' borderColor="gray.500" borderRadius="md">
             <Thead>
               <Tr>
                 <Th border="1px solid" borderColor="gray.500">Date</Th>
@@ -124,7 +124,7 @@ export const Request = () => {
                       onChange={e => handleStatusChange(request.id, e.target.value)}
                       variant="outline"
                       borderColor="gray.500"
-                      width="150px"
+                      width={["100px", "120px", "150px"]}
                       _focus={{ bg: request.status === 'Denied' ? 'red' : 'green.300' }}
                     >
                       <option value="Pending">Pending</option>
@@ -138,10 +138,10 @@ export const Request = () => {
           </Table>
         </TableContainer>
       </Box>
-
-        <Button leftIcon={<ArrowBackIcon />} colorScheme="green" mt={4} onClick={handleBack} mr={4}>
-            Back
-        </Button>
+  
+      <Button leftIcon={<ArrowBackIcon />} colorScheme="green" mt={4} onClick={handleBack} mr={4}>
+        Back
+      </Button>
     </Box>
   );
 };

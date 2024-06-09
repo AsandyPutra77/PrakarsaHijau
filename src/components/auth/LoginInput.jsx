@@ -14,7 +14,9 @@ import {
   Grid,
   GridItem,
   Image,
-  Icon
+  Icon,
+  InputRightElement,
+  InputGroup
 } from '@chakra-ui/react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
@@ -24,12 +26,14 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
 import { FaEnvelope, FaLock } from 'react-icons/fa'; 
 import { motion } from 'framer-motion';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 export const LoginInput = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -126,16 +130,28 @@ export const LoginInput = () => {
                   </FormControl>
                   <FormControl id="password">
                     <FormLabel>Password</FormLabel>
-                    <Flex align="center">
+                    <InputGroup>
+                    <Flex align="center" width={'100%'}>
                       <Icon as={FaLock} color="gray.400" mr={4}/>
                       <Input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         className='form-control'
                         placeholder='Masukkan Password Anda...'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        flex={1}
                       />
+<                         InputRightElement h={'full'}>
+                          <Button
+                            variant={'ghost'}
+                            onClick={() =>
+                              setShowPassword((showPassword) => !showPassword)
+                            }>
+                            {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                          </Button>
+                        </InputRightElement>
                     </Flex>
+                    </InputGroup>
                   </FormControl>
                   <Button
                     type='submit'

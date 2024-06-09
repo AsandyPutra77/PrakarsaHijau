@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Box, Heading, Text, Image, Tag, TagLabel, TagRightIcon, Flex, Button, Input, VStack, HStack, IconButton } from '@chakra-ui/react';
 import { IoIosPricetags } from "react-icons/io";
-import { ArrowBackIcon, ArrowUpIcon, ArrowDownIcon } from '@chakra-ui/icons';
+import { ArrowBackIcon, ArrowUpIcon, ArrowDownIcon, DeleteIcon } from '@chakra-ui/icons';
 import { db, auth } from '../../firebase/firebase';
-import { doc, getDoc, collection, query, where, onSnapshot, addDoc, updateDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, query, where, onSnapshot, addDoc, updateDoc, setDoc, deleteDoc, getDocs} from 'firebase/firestore';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../helper/Loading';
+import { DeleteAlertDialog } from '../action/DeleteAlertDialog';
 
 export const DetailTips = () => {
   const { id } = useParams();
@@ -14,6 +15,10 @@ export const DetailTips = () => {
   const [ comments, setComments ] = useState([]);
   const [ newComment, setNewComment ] = useState('');
   const [ user, setUser ] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [deleteCommentId, setDeleteCommentId] = useState(null);
+  const onClose = () => setIsOpen(false);
+  const cancelRef = useRef();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -22,6 +27,7 @@ export const DetailTips = () => {
       const docSnap = await getDoc(docRef);
       if (docSnap.exists()) {
         setTip(docSnap.data());
+
       }
     }
 
@@ -87,6 +93,10 @@ export const DetailTips = () => {
         await setDoc(userRef, { displayName: user.displayName, avatar: user.photoURL });
       }
 
+      const tipDoc = await getDoc(doc(db, 'tips', id));
+
+      const totalComments = tipDoc.data().totalComments || 0;
+
       await addDoc(collection(db, 'comments'), { 
         text: newComment, 
         tipId: id, 
@@ -97,6 +107,10 @@ export const DetailTips = () => {
       });
 
       setNewComment('');
+      
+      await updateDoc(doc(db, 'tips', id), {
+        totalComments: totalComments + 1
+      });
     }
   }
 
@@ -131,6 +145,39 @@ export const DetailTips = () => {
       });
     }
   }
+
+const handleDeleteTips = async () => {
+    if (user.uid === tip.uid) {
+      setIsOpen(true);
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    setDeleteCommentId(commentId);
+    setIsOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (deleteCommentId) {
+      await deleteDoc(doc(db, 'comments', deleteCommentId));
+      setDeleteCommentId(null);
+    } else {
+      await deleteRelatedComments();
+      await deleteDoc(doc(db, 'tips', id));
+      navigate('/tips');
+    }
+    onClose();
+  };
+
+  const deleteRelatedComments = async () => {
+    const commentsRef = collection(db, 'comments');
+    const q = query(commentsRef, where("tipId", "==", id));
+    const querySnapshot = await getDocs(q);
+    querySnapshot.forEach(async (doc) => {
+      await deleteDoc(doc.ref);
+    });
+  };
+  
 
   if (!tip) {
     return <Loading />;
@@ -172,35 +219,67 @@ export const DetailTips = () => {
               p="5"
               width="100%"
           >
+            <Flex justify="space-between" align="center">
               <Heading 
-                  fontFamily="'Inter'" 
-                  fontWeight="600" 
-                  fontSize="3xl"
-                  mb="2"
-                  color="#333333"
+                fontFamily="'Inter'" 
+                fontWeight="600" 
+                fontSize="3xl"
+                mb="2"
+                color="#333333"
               >
-                  {tip.title}
+                {tip.title}
               </Heading>
-            <Tag size='md' variant='solid' bg="#6ED840" color="#FFFFFF" maxWidth="fit-content" whiteSpace="nowrap" mb="4">
-                <TagLabel>#{tip.tag}</TagLabel>
-                <TagRightIcon as={IoIosPricetags} />
-            </Tag>
+              {user.uid === tip.uid && (
+                <Button 
+                  leftIcon={<DeleteIcon />} 
+                  colorScheme="red" 
+                  onClick={handleDeleteTips}
+                >
+                  Delete Tip
+                </Button>
+              )}
+                <DeleteAlertDialog 
+                isOpen={isOpen}
+                onClose={onClose}
+                leastDestructiveRef={cancelRef}
+                onConfirm={confirmDelete}
+                  />
+              </Flex>
+              <HStack spacing={4}>
+                    {Array.isArray(tip.tag) && tip.tag.map((tag, index) => (
+                        <Tag size='md' key={index} variant='solid' colorScheme='blue'>
+                            <TagLabel>{tag.trim()}</TagLabel>
+                            <TagRightIcon as={IoIosPricetags} />
+                        </Tag>
+                    ))}
+                </HStack>
             <Text 
                 fontFamily="'Inter'"
                 fontSize="md"
-            >
+                mt={4}
+              >
                 {tip.description}
             </Text>
             <Input 
                 value={newComment} 
                 onChange={handleNewCommentChange} 
-                placeholder="Add a comment" 
+                placeholder="Add a comment"
+                outlineColor={'#08C84F'} 
                 mb="4"
+                mt={8}
             />
-            <Button onClick={handleNewCommentSubmit} mb={4}>Submit Comment</Button>
+            <Button colorScheme='teal' onClick={handleNewCommentSubmit} mb={4}>Submit Comment</Button>
             <VStack align="stretch" spacing="4">
             {comments.map(comment => (
-                  <Box key={comment.id} bg="white" p="4" borderRadius="md">
+                  <Box     
+                  key={comment.id} 
+                  bg="white" 
+                  p="4" 
+                  borderRadius="md"
+                  border="1px solid #E2E8F0"
+                  backgroundColor="#EDF2F7"
+                  padding="10px" 
+                  marginBottom="10px">
                       <HStack mb="2">
                           <Image objectFit='cover' boxSize="40px" borderRadius="full" src={comment.userAvatar} alt={comment.userName} />
                           <Text fontWeight="bold">{comment.userName}</Text>
@@ -226,6 +305,20 @@ export const DetailTips = () => {
                         />
                         <Text>{comment.downvotes}</Text>
                       </HStack>
+
+                      {user.uid === comment.userId && (
+                          <IconButton 
+                            icon={<DeleteIcon/>} 
+                            colorScheme="red" 
+                            onClick={() => handleDeleteComment(comment.id)}
+                          />
+                        )}
+                        <DeleteAlertDialog 
+                          isOpen={isOpen}
+                          onClose={onClose}
+                          leastDestructiveRef={cancelRef}
+                          onConfirm={confirmDelete}
+                            />
                       </HStack>
                   </Box>
               ))}
