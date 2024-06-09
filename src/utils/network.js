@@ -1,13 +1,17 @@
 export async function fetchHealthArticles() {
-    const apiKey = 'a77ce0b908e84700951fe15d6a0c0e75';
-    const url = `https://newsapi.org/v2/top-headlines?country=us&category=health&apiKey=${apiKey}`;
-  
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-      return data.articles;
-    } catch (error) {
-      console.error('Error fetching health articles:', error);
-      return [];
-    }
+  const apikey = '239e6dd5d4487358f370143d368a6b84';
+  const category = 'health';
+  const url = 'https://gnews.io/api/v4/top-headlines?category=' + category + '&lang=en&country=us&max=10&apikey=' + apikey;
+
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`);
   }
+
+  const data = await response.json();
+  return data.articles.map(article => ({
+    title: article.title,
+    summary: article.description,
+    image: article.image,
+  }));
+}
