@@ -163,6 +163,20 @@ const handleDeleteTips = async () => {
       setDeleteCommentId(null);
     } else {
       await deleteRelatedComments();
+  
+      const userDoc = doc(db, 'users', tip.uid);
+      const userSnap = await getDoc(userDoc);
+  
+      if (userSnap.exists()) {
+        const totalTips = userSnap.data().totalTips || 0;
+  
+        const newTotalTips = totalTips > 0 ? totalTips - 1 : 0;
+  
+        await updateDoc(userDoc, {
+          totalTips: newTotalTips
+        });
+      }
+  
       await deleteDoc(doc(db, 'tips', id));
       navigate('/tips');
     }
