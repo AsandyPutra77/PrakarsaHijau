@@ -166,7 +166,7 @@ export const TipsInput = () => {
                     />
                     <Input
                         type="text"
-                        placeholder="#Tag"
+                        placeholder="Tag (use commas (,) to separate each tag)"
                         value={tag.join(',')}
                         onChange={(e) => setTag(e.target.value.split(','))}
                         mb={4}

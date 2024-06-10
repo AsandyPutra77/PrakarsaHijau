@@ -30,7 +30,7 @@ export const Footer = () => {
             <img src="/assets/PrakarsaHijauLogo_prev_ui 1.png" alt="Lift Media Logo" className="w-16" />
           </div>
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-            <a href="/team" className="hover:underline">Team</a>
+            <a href="https://github.com/AsandyPutra77/PrakarsaHijau" className="hover:underline">Team</a>
             <a href="/case-studies" className="hover:underline">Case Studies</a>
             <a href="/publications" className="hover:underline">Publications</a>
           </div>

@@ -6,7 +6,6 @@ import { auth, db } from "../../firebase/firebase"
 import { useState, useEffect} from "react"
 import { doc, onSnapshot} from 'firebase/firestore';
 import { Loading } from "../helper/Loading";
-import { SignOut } from "@emotion-icons/fluentui-system-regular"
 
 export const NavBar = () => {
 
@@ -64,11 +63,11 @@ export const NavBar = () => {
                         variant="ghost"
                         onClick={onOpen}
                     />
-                    <Text m="10px" fontSize={{ base: 'md', md: 'lg' }}>PrakarsaHijau</Text>
+                    <Text m="10px" fontSize={{ base: 'md', md: 'lg' }} className="font-pacifico font-bold tracking-wide ">Prakarsa Hijau</Text>
                 </Flex>
             ) : (
                 <Flex align="center" justify="space-between" direction="row">
-                    <Text m="10px" fontSize={{ base: 'md', md: 'lg' }}>PrakarsaHijau</Text>
+                    <Text m="10px" fontSize={{ base: 'md', md: 'lg' }} className="font-pacifico font-bold tracking-wide ">Prakarsa Hijau</Text>
                     <HStack spacing={{ base: '12px', md: '24px' }} ml={{ base: "5%", md: "5%", lg: "5%" }}>
                         <LinkBox as="div" p="5px" _hover={{ bg: 'whiteAlpha.200' }}>
                             <LinkOverlay as={NavLink} _activeLink={{fontWeight: "bold"}} to='/landing'>

@@ -2,8 +2,14 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        'lobster': ['Lobster', 'cursive'],
+        'pacifico': ['Pacifico', 'cursive'],
+      }
+    },
   },
+  variants: {},
   plugins: [],
 }
 

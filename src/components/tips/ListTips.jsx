@@ -9,6 +9,7 @@ import { SearchBar } from "../helper/SearchBar";
 export const ListTips = () => {
     const [tips, setTips] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [sortOption, setSortOption] = useState("likes");
 
     const handleSearchResults = (results) => {
         setTips(results);
@@ -16,11 +17,16 @@ export const ListTips = () => {
 
     const resetTips = async () => {
         setLoading(true);
-        const tipsCollection = collection(db, "tips");
-        const tipsSnapshot = await getDocs(tipsCollection);
-        const tipsList = tipsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-        setTips(tipsList);
-        setLoading(false);
+        try {
+            const tipsCollection = collection(db, "tips");
+            const tipsSnapshot = await getDocs(tipsCollection);
+            const tipsList = tipsSnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+            setTips(tipsList);
+        } catch (error) {
+            console.error("Error fetching tips:", error);
+        } finally {
+            setLoading(false);
+        }
     };
 
     useEffect(() => {
@@ -36,10 +42,15 @@ export const ListTips = () => {
     }
 
     return (
-        <VStack spacing={6} mt={10} width="100%">
+        <VStack spacing={6} mt={2} width="100%">
             <Box width="100%" padding={4}>
                 <Heading as="h2" size="lg" mb={4} textColor={'#0B9586'}>Search Tips</Heading>
-                <SearchBar onResults={handleSearchResults} onReset={resetTips} />
+                <SearchBar 
+                    onResults={handleSearchResults} 
+                    onReset={resetTips} 
+                    sortOption={sortOption}
+                    setSortOption={setSortOption}
+                />
             </Box>
             {tips.length > 0 ? (
                 <Grid templateColumns={{ base: "1fr", md: "repeat(3, 1fr)" }} gap={6} width="100%">

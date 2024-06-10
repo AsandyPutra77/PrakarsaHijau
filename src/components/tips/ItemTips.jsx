@@ -156,7 +156,7 @@ export const ItemTips = ({ tip }) => {
                 <HStack spacing={4}>
                     {Array.isArray(tip.tag) && tip.tag.map((tag, index) => (
                         <Tag size='md' key={index} variant='solid' colorScheme='blue'>
-                            <TagLabel>{tag.trim()}</TagLabel>
+                            <TagLabel>#{tag.trim()}</TagLabel>
                             <TagRightIcon as={IoIosPricetags} />
                         </Tag>
                     ))}

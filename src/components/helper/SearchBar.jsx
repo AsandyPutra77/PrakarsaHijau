@@ -45,6 +45,10 @@ export const SearchBar = ({ onResults, onReset }) => {
                     border="1px"
                     borderColor="gray.300"
                     focusBorderColor="teal.500"
+                    width={{ base: "100%", md: "80" }}
+                    maxWidth={{ md: "full" }}
+                    transition="width 0.2s"
+                    _hover={{ width: "100%" }}
                 />
             </HStack>
         </Box>
