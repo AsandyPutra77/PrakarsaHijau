@@ -6,6 +6,11 @@ import { useNavigate } from 'react-router-dom';
 export const Footer = () => {
 
   const navigate = useNavigate();
+
+  const handleContactUs = () => {
+    window.location.href = "mailto:C624-PS130@dicoding.org?subject=Contact%20Us&body=Hi%20Prakarsa%20Hijau%2C%0A%0A%0A%0ARegards%2C";
+  }
+
   return (
     <footer className="bg-green-500 text-white py-16">
       <div className="container mx-auto text-center px-4 sm:px-0">
@@ -13,7 +18,7 @@ export const Footer = () => {
       <h2 className="text-3xl font-bold mb-4">Learn More About Our Initiatives</h2>
       <p className="mb-8">Prakarsa Hijau is a dedicated organization focused on promoting and developing sustainable environmental practices.</p>
         <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4 mb-8">
-          <button className="bg-white text-green-500 font-bold py-2 px-8 rounded-full">
+          <button className="bg-white text-green-500 font-bold py-2 px-8 rounded-full" onClick={handleContactUs}>
             Contact Us
           </button>
           <button className="bg-white text-green-500 font-bold py-2 px-8 rounded-full" onClick={() => navigate('/about')}>

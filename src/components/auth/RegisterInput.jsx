@@ -102,6 +102,7 @@ export const RegisterInput = () => {
 
             <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <Image
+                ml={{ base: 5, md: 0 }}
                 src="/assets/Group 1.png"
                 alt="Group 1"
                 objectFit="center"

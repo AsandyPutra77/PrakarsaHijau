@@ -53,7 +53,7 @@ export const LoginInput = () => {
         isClosable: true,
         onCloseComplete: () => navigate('/landing')
       });
-      setTimeout(() => setLoading(false), 4000); // Set loading to false after 4 seconds
+      setTimeout(() => setLoading(false), 4000);
     } catch (error) {
       console.log(error.message);
       toast({
@@ -63,7 +63,7 @@ export const LoginInput = () => {
         duration: 3000,
         isClosable: true,
       });
-      setTimeout(() => setLoading(false), 9000); // Set loading to false after 9 seconds
+      setTimeout(() => setLoading(false), 9000);
     }
   };
 
@@ -71,7 +71,7 @@ export const LoginInput = () => {
 
     <Grid
       minH={'100vh'}
-      templateColumns={{ base: '1fr', md: '1fr 1fr' }}
+      templateColumns={{ base: '1fr',sm: '1fr', md: '1fr 1fr' }}
       bg={useColorModeValue('gray.50', 'gray.800')}
     >
       <GridItem>
@@ -88,11 +88,12 @@ export const LoginInput = () => {
           >
             <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <Image
+                ml={{ base: 5, md: 0 }}
                 src="/assets/Group 1.png"
                 alt="Group 1"
-                objectFit="center"
-                w="100%"
-                h="100%"
+                objectFit="cover"
+                maxWidth="100%"
+                height="auto"
               />
             </motion.div>
           </Box>
@@ -100,9 +101,9 @@ export const LoginInput = () => {
       </GridItem>
       <GridItem>
         <Flex align={'center'} justify={'center'} h="100%">
-          <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+          <Stack spacing={{ base: 4, md: 8 }} mx={'auto'} maxW={'lg'} py={12} px={{ base: 4, md: 6 }}>
             <Stack align={'center'}>
-              <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+            <Heading fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>Sign in to your account</Heading>
               <Text fontSize={'lg'} color={'gray.600'}>
                 Don&apos;t have an account? <Link as={ReactRouterLink} to="/register" color={'blue.400'}>Register</Link>
               </Text>
@@ -111,7 +112,7 @@ export const LoginInput = () => {
               rounded={'lg'}
               bg={useColorModeValue('white', 'gray.700')}
               boxShadow={'lg'}
-              p={8}
+              p={{ base: 4, md: 8 }}
             >
               <form onSubmit={handleSubmit}>
                 <Stack spacing={4}>
