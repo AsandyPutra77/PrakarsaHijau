@@ -19,9 +19,9 @@ export const AuthProvider = ({ children }) => {
         if (docSnap.exists()) {
           setCurrentUser({ uid: user.uid, role: docSnap.data().role });
         } else {
-          // Check if the user signed in with Google
+          
           if (user.providerData.some((provider) => provider.providerId === "google.com")) {
-            // Set a default role if the user signed in with Google and doesn't have a document
+            
             setCurrentUser({ uid: user.uid, role: "default" });
           } else {
             console.log("No such document!");

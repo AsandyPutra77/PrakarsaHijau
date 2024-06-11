@@ -1,24 +1,90 @@
 import React, { useState, useEffect } from "react";
-import { Box, Heading, Text, HStack, Image, Tag, TagLabel, TagRightIcon, Avatar, Link as ReactRouterLink} from "@chakra-ui/react";
+import { Box, Heading, Text, HStack, Image, Tag, TagLabel, TagRightIcon, Avatar, Link as ReactRouterLink, IconButton } from "@chakra-ui/react";
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { IoIosPricetags } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { doc, onSnapshot } from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, arrayUnion, arrayRemove} from 'firebase/firestore';
 import { db } from "../../firebase/firebase";
 import { timeFormatter } from "../../utils/formatter/timeFormatter";
+import { FaRegThumbsUp, FaThumbsUp, FaRegThumbsDown, FaThumbsDown } from "react-icons/fa";
 
 export const ItemTips = ({ tip }) => {
 
     const [user, setUser] = useState(null);
+    const [likes, setLikes] = useState(0);
+    const [dislikes, setDislikes] = useState(0);
+    const [liked, setLiked] = useState(false);
+    const [disliked, setDisliked] = useState(false);
 
     useEffect(() => {
         if (tip.uid) {
             const unsub = onSnapshot(doc(db, 'users', tip.uid), (doc) => {
                 setUser(doc.data());
             });
+            const tipRef = doc(db, 'tips', tip.id);
+            onSnapshot(tipRef, (doc) => {
+                const data = doc.data();
+                setLikes(data.likes);
+                setDislikes(data.dislikes);
+                setLiked(data.likedUsers && data.likedUsers.includes(tip.uid));
+                setDisliked(data.dislikedUsers && data.dislikedUsers.includes(tip.uid));
+            });
             return () => unsub();
         }
-    }, [tip.uid]);
+    }, [tip.uid, tip.id]);
+
+    const handleLike = async () => {
+        const tipRef = doc(db, 'tips', tip.id);
+        if (liked) {
+            setLikes(likes - 1);
+            await updateDoc(tipRef, {
+                likes: likes - 1,
+                likedUsers: arrayRemove(tip.uid)
+            });
+        } else {
+            setLikes(likes + 1);
+            await updateDoc(tipRef, {
+                likes: likes + 1,
+                likedUsers: arrayUnion(tip.uid)
+            });
+            if (disliked) {
+                setDisliked(false);
+                setDislikes(dislikes - 1);
+                await updateDoc(tipRef, {
+                    dislikes: dislikes - 1,
+                    dislikedUsers: arrayRemove(tip.uid)
+                });
+            }
+        }
+        setLiked(!liked);
+    };
+
+    const handleDislike = async () => {
+        const tipRef = doc(db, 'tips', tip.id);
+        if (disliked) {
+            setDislikes(dislikes - 1);
+            await updateDoc(tipRef, {
+                dislikes: dislikes - 1,
+                dislikedUsers: arrayRemove(tip.uid)
+            });
+        } else {
+            setDislikes(dislikes + 1);
+            await updateDoc(tipRef, {
+                dislikes: dislikes + 1,
+                dislikedUsers: arrayUnion(tip.uid)
+            });
+            if (liked) {
+                setLiked(false);
+                setLikes(likes - 1);
+                await updateDoc(tipRef, {
+                    likes: likes - 1,
+                    likedUsers: arrayRemove(tip.uid)
+                });
+            }
+        }
+        setDisliked(!disliked);
+    };
+
     return (
         <Box 
             m={4} 
@@ -35,7 +101,7 @@ export const ItemTips = ({ tip }) => {
                 <Avatar 
                     size="lg"
                     name={user?.displayName} 
-                    src={user?.photoURL || 'https://bit.ly/broken-link'} 
+                    src={user?.avatar || 'https://bit.ly/broken-link'} 
                 />
                 <Box>
                     <Text fontSize="xl" fontWeight="bold" color="black">{user?.displayName || 'Anonym'}</Text>
@@ -88,10 +154,10 @@ export const ItemTips = ({ tip }) => {
                 </Heading>
 
                 <HStack spacing={4}>
-                    {['md'].map((size) => (
-                        <Tag size={size} key={size} variant='solid' colorScheme='blue'>
-                        <TagLabel>#{tip.tag}</TagLabel>
-                        <TagRightIcon as={IoIosPricetags} />
+                    {Array.isArray(tip.tag) && tip.tag.map((tag, index) => (
+                        <Tag size='md' key={index} variant='solid' colorScheme='blue'>
+                            <TagLabel>#{tag.trim()}</TagLabel>
+                            <TagRightIcon as={IoIosPricetags} />
                         </Tag>
                     ))}
                 </HStack>
@@ -104,16 +170,24 @@ export const ItemTips = ({ tip }) => {
                     {tip.description}
                 </Text>
 
-                <Link as={ReactRouterLink} to={`/tips/${tip.id}`}>
-                <Text
-                    fontFamily="'Inter'"
-                    fontSize='16px'
-                    color="#08C84F"
-                    flex='1'
-                >
-                    Lihat Details <ArrowForwardIcon />
-                </Text>
-            </Link>
+                <HStack justifyContent="space-between">
+                    <Link as={ReactRouterLink} to={`/tips/${tip.id}`}>
+                        <Text
+                            fontFamily="'Inter'"
+                            fontSize='16px'
+                            color="#08C84F"
+                            flex='1'
+                        >
+                            Lihat Details <ArrowForwardIcon />
+                        </Text>
+                    </Link>
+                    <HStack spacing={4}>
+                        <IconButton aria-label="Like" icon={liked ? <FaThumbsUp /> : <FaRegThumbsUp />} onClick={handleLike} />
+                        <Text>{likes}</Text>
+                        <IconButton aria-label="Dislike" icon={disliked ? <FaThumbsDown /> : <FaRegThumbsDown />} onClick={handleDislike} />
+                        <Text>{dislikes}</Text>
+                    </HStack>
+                </HStack>
             </Box>
         </Box>
     )

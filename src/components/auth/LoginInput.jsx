@@ -14,7 +14,9 @@ import {
   Grid,
   GridItem,
   Image,
-  Icon
+  Icon,
+  InputRightElement,
+  InputGroup
 } from '@chakra-ui/react';
 
 import { Link as ReactRouterLink } from 'react-router-dom';
@@ -24,12 +26,14 @@ import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../../firebase/firebase';
 import { FaEnvelope, FaLock } from 'react-icons/fa'; 
 import { motion } from 'framer-motion';
+import { ViewIcon, ViewOffIcon } from '@chakra-ui/icons';
 
 export const LoginInput = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [isLoading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const toast = useToast();
   const navigate = useNavigate();
@@ -49,17 +53,17 @@ export const LoginInput = () => {
         isClosable: true,
         onCloseComplete: () => navigate('/landing')
       });
-      setTimeout(() => setLoading(false), 4000); // Set loading to false after 4 seconds
+      setTimeout(() => setLoading(false), 4000);
     } catch (error) {
       console.log(error.message);
       toast({
         title: 'Login failed.',
         description: "Email or password is incorrect.",
         status: 'error',
-        duration: 9000,
+        duration: 3000,
         isClosable: true,
       });
-      setTimeout(() => setLoading(false), 9000); // Set loading to false after 9 seconds
+      setTimeout(() => setLoading(false), 9000);
     }
   };
 
@@ -67,7 +71,7 @@ export const LoginInput = () => {
 
     <Grid
       minH={'100vh'}
-      templateColumns={{ base: '1fr', md: '1fr 1fr' }}
+      templateColumns={{ base: '1fr',sm: '1fr', md: '1fr 1fr' }}
       bg={useColorModeValue('gray.50', 'gray.800')}
     >
       <GridItem>
@@ -84,11 +88,12 @@ export const LoginInput = () => {
           >
             <motion.div initial={{ opacity: 0, y: 50 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
               <Image
+                ml={{ base: 5, md: 0 }}
                 src="/assets/Group 1.png"
                 alt="Group 1"
-                objectFit="center"
-                w="100%"
-                h="100%"
+                objectFit="cover"
+                maxWidth="100%"
+                height="auto"
               />
             </motion.div>
           </Box>
@@ -96,9 +101,9 @@ export const LoginInput = () => {
       </GridItem>
       <GridItem>
         <Flex align={'center'} justify={'center'} h="100%">
-          <Stack spacing={8} mx={'auto'} maxW={'lg'} py={12} px={6}>
+          <Stack spacing={{ base: 4, md: 8 }} mx={'auto'} maxW={'lg'} py={12} px={{ base: 4, md: 6 }}>
             <Stack align={'center'}>
-              <Heading fontSize={'4xl'}>Sign in to your account</Heading>
+            <Heading fontSize={{ base: '2xl', sm: '3xl', md: '4xl' }}>Sign in to your account</Heading>
               <Text fontSize={'lg'} color={'gray.600'}>
                 Don&apos;t have an account? <Link as={ReactRouterLink} to="/register" color={'blue.400'}>Register</Link>
               </Text>
@@ -107,7 +112,7 @@ export const LoginInput = () => {
               rounded={'lg'}
               bg={useColorModeValue('white', 'gray.700')}
               boxShadow={'lg'}
-              p={8}
+              p={{ base: 4, md: 8 }}
             >
               <form onSubmit={handleSubmit}>
                 <Stack spacing={4}>
@@ -126,16 +131,28 @@ export const LoginInput = () => {
                   </FormControl>
                   <FormControl id="password">
                     <FormLabel>Password</FormLabel>
-                    <Flex align="center">
+                    <InputGroup>
+                    <Flex align="center" width={'100%'}>
                       <Icon as={FaLock} color="gray.400" mr={4}/>
                       <Input
-                        type="password"
+                        type={showPassword ? 'text' : 'password'}
                         className='form-control'
                         placeholder='Masukkan Password Anda...'
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
+                        flex={1}
                       />
+<                         InputRightElement h={'full'}>
+                          <Button
+                            variant={'ghost'}
+                            onClick={() =>
+                              setShowPassword((showPassword) => !showPassword)
+                            }>
+                            {showPassword ? <ViewIcon /> : <ViewOffIcon />}
+                          </Button>
+                        </InputRightElement>
                     </Flex>
+                    </InputGroup>
                   </FormControl>
                   <Button
                     type='submit'

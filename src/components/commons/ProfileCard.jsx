@@ -20,35 +20,41 @@ import { MdMarkEmailRead, MdVolunteerActivism} from "react-icons/md";
 import { GiAchievement } from "react-icons/gi";
 import { FaCrown } from "react-icons/fa6";
 import { CiEdit } from "react-icons/ci";
-import { doc, getDoc} from 'firebase/firestore';
+import { doc, onSnapshot} from 'firebase/firestore';
 import { useState, useEffect } from 'react';
 import { auth, db} from '../../firebase/firebase';
 import { getRemoteConfig, fetchAndActivate, getAll} from 'firebase/remote-config';
 import { useNavigate } from 'react-router-dom';
+import { useRequest } from '../../utils/hooks/useRequest';
 
 
 export const ProfileCard = () => {
 
   const [userDetails, setUserDetails] = useState("");
   const [totalContributor, setTotalContributor] = useState(0);
+  const [, handleRoleUpgrade] = useRequest();
+  const [status, setStatus] = useState(null);
 
   const navigate = useNavigate();
 
-  const fetchUserDetails = async () => {
-    auth.onAuthStateChanged(async (user) => {
+  const fetchUserDetails = () => {
+    auth.onAuthStateChanged((user) => {
       if (user) {
-        const docRef = doc(db, 'users', user.uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setUserDetails(docSnap.data());
-        } else {
-          console.log('No such document!');
-        }
-      } else {
-        console.log('User is signed out');
+        const userDocRef = doc(db, 'users', user.uid);
+        const unsubscribe = onSnapshot(userDocRef, (doc) => {
+          if (doc.exists()) {
+            setUserDetails(doc.data());
+            setStatus(doc.data().status || null);
+          } else {
+            console.log('No such document!');
+          }
+        });
+  
+        // Return the unsubscribe function to clean up
+        return unsubscribe;
       }
     });
-  }
+  };
   
   const fetchRemoteConfig = async () => {
     const remoteConfig2 = getRemoteConfig();
@@ -60,8 +66,12 @@ export const ProfileCard = () => {
   };
 
   useEffect (() => {
-    fetchUserDetails();
+    const unsubscribe = fetchUserDetails();
     fetchRemoteConfig();
+
+    return () => {
+      unsubscribe && unsubscribe();
+    };
   }, []);
 
   return (
@@ -76,6 +86,7 @@ export const ProfileCard = () => {
           <Text fontSize="xl" mb={2}><strong>{userDetails.displayName}</strong></Text>
           <IconButton aria-label="Edit Profile" mb={1} variant={'outline'} icon={<CiEdit />} onClick={() => navigate('/edit-profile')} />
           </HStack>
+          <HStack>
            {userDetails.totalTips >= totalContributor && 
               <Badge colorScheme='green'>
                 <Flex justifyContent="space-between" width="100%">
@@ -84,14 +95,15 @@ export const ProfileCard = () => {
                 </Flex>
               </Badge>
             }
+            <Tag size="md">
+              <TagRightIcon boxSize="12px" as={FaBriefcase}  mr={2}/>
+              {userDetails.title} 
+            </Tag>
+          </HStack>
           <HStack spacing={2}>
             <MdMarkEmailRead size="20px" style={{alignSelf: "center", marginBottom: 4}}/>
             <Text fontSize="md" mb={2}>{userDetails.email}</Text>
           </HStack>
-          <Tag size="md" mb={2}>
-          <TagRightIcon boxSize="12px" as={FaBriefcase}  mr={2}/>
-            {userDetails.title}
-          </Tag>
           <HStack align={'center'}>
             <MdVolunteerActivism style={{alignSelf: "center", marginBottom: 8}}/> 
           <Text fontSize="md" mb={2}><strong>Total Contribution:</strong> {userDetails.totalTips || "0"}</Text>
@@ -100,11 +112,12 @@ export const ProfileCard = () => {
             <Text fontSize="md" mb={2}>{userDetails.aboutMe || 'Deskripsikan dirimu !'}</Text>
           </Box>
           <Stack direction="row" spacing={4} mt={20} align="center">
-            <Button colorScheme="green" size="md" mt={'auto'}>
-              Upgrade Role
-               &nbsp; <FaCrown color='yellow'/>
+          {status !== 'success' && userDetails.role !== 'admin' && (
+            <Button colorScheme="green" size="md" mt={'auto'} onClick={() => {status === null && userDetails.role !== 'advance' ? handleRoleUpgrade() : null;}} disabled={status !== null || userDetails.role === 'advance'}>
+              {userDetails?.role === 'advance' ? 'Role Upgraded' : (status === null ? 'Upgrade Role' : (status === 'pending' ? 'On Process !, please wait...  ' : 'Role Upgraded'))}
+              &nbsp; {status === null && userDetails.role !== 'advance' && <FaCrown color='yellow'/>}
             </Button>
-
+            )}
           </Stack>
         </VStack>
       </Box>
