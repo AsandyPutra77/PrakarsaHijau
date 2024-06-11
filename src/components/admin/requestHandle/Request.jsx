@@ -4,6 +4,7 @@ import { db } from "../../../firebase/firebase";
 import {
   Box,
   Button,
+
   Table,
   Thead,
   Tbody,
@@ -27,7 +28,6 @@ export const Request = () => {
   const handleBack = () => {
     navigate(-1);
   }
-
   useEffect(() => {
     const fetchRequests = async () => {
       const requestsCollection = collection(db, "upgradeRequests");
@@ -44,7 +44,6 @@ export const Request = () => {
 
     fetchRequests();
   }, []);
-
   const changeUserRole = async (id, newRole) => {
     const userRef = doc(db, 'users', id);
     
@@ -93,7 +92,6 @@ export const Request = () => {
     );
   }
 
-
   return (
     <Box p={[2, 4, 5]} maxWidth={["90%", "85%", "80%"]} mx="auto">
       <Text fontSize={["lg", "xl", "2xl"]} mb={5}>Role Request Overview</Text>
@@ -138,7 +136,6 @@ export const Request = () => {
           </Table>
         </TableContainer>
       </Box>
-  
       <Button leftIcon={<ArrowBackIcon />} colorScheme="green" mt={4} onClick={handleBack} mr={4}>
         Back
       </Button>
