@@ -1,15 +1,21 @@
-import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
-import PropTypes from 'prop-types'
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import NotFoundComponent from '../../components/commons/NotFound'; // Import the NotFound component
 
-export const NotFound = ({redirectPage}) => {
-    const navigate = useNavigate()
+const NotFound = ({ redirectPage }) => {
+  const navigate = useNavigate();
 
-    useEffect(() => {
-        setTimeout(() => navigate(`${redirectPage}`), 0)
-    }, [navigate, redirectPage])
-}
+  useEffect(() => {
+    const timer = setTimeout(() => navigate(redirectPage), 5000); // Redirect after 5 seconds
+    return () => clearTimeout(timer); // Clean up the timer on component unmount
+  }, [navigate, redirectPage]);
+
+  return <NotFoundComponent />; // Use the imported NotFound component
+};
 
 NotFound.propTypes = {
-    redirectPage: PropTypes.string.isRequired,
-}
+  redirectPage: PropTypes.string.isRequired,
+};
+
+export default NotFound;

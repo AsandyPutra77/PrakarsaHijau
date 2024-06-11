@@ -32,7 +32,7 @@ export const ArticleRecycler = () => {
     return (
         <motion.div ref={ref} className="flex flex-col ml-4 md:ml-20 my-12" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={variants}>
             <h1 className="text-[#0B9586] text-2xl md:text-3xl font-semibold mb-4">Health Articles</h1>
-            <div className="flex overflow-x-scroll" style={{ width: '100%', maxWidth: '80rem' }}>
+            <div className="flex overflow-x-scroll">
                 {Array.isArray(articles) && articles.map((article, index) => (
                     <motion.div key={index} className="flex-shrink-0 w-48 md:w-64 mx-2 bg-white rounded shadow-md" whileHover={{ scale: 1.05 }} onClick={() => navigateToArticle(article.title)}>
                         <img src={article.image} alt="Article" className="w-full h-24 md:h-32 object-cover rounded-t" />

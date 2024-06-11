@@ -89,7 +89,7 @@ export const TrendingTips = () => {
     return (
         <motion.div ref={ref} className="flex flex-col ml-4 md:ml-20 my-12" initial="hidden" animate={inView ? 'visible' : 'hidden'} variants={variants}>
             <Heading as="h1" size="xl" mb={4} color="#0B9586" onClick={() => navigate('/tips')}>Trending Tips</Heading>
-            <Flex overflowX="scroll" width="100%" maxWidth="80rem">
+            <Flex overflowX="scroll">
                 {tips.map((tip, index) => (
                     <motion.div
                         key={index}
