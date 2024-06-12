@@ -222,11 +222,12 @@ const handleDeleteTips = async () => {
               Back to Tips
           </Button>
           <Image 
-              height="500px"
+              height="100%"
               width="100%"
               src={tip.imageUrl} 
               alt={tip.title} 
-              objectFit="cover"
+              objectPosition={'center'}
+              objectFit={'cover'}
           />
           <Flex 
               direction="column" 

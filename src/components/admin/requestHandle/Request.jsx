@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { doc, updateDoc, deleteField, deleteDoc} from "firebase/firestore";
+import { doc, updateDoc, deleteField, deleteDoc, getDoc } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 import {
   Box,
   Button,
-
   Table,
   Thead,
   Tbody,
@@ -23,18 +22,36 @@ import { collection, getDocs } from "firebase/firestore";
 export const Request = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, ] = useState(10);
+  const [sortOrder, setSortOrder] = useState('asc');
   const navigate = useNavigate();
 
   const handleBack = () => {
     navigate(-1);
   }
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = requests.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(requests.length / itemsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   useEffect(() => {
     const fetchRequests = async () => {
       const requestsCollection = collection(db, "upgradeRequests");
       const snapshot = await getDocs(requestsCollection);
 
       if (!snapshot.empty) {
-        setRequests(snapshot.docs.map(doc => ({ ...doc.data(), id: doc.id })));
+        const requestWithUsernames = await Promise.all(
+          snapshot.docs.map(async requestDoc => {
+            const requestData = requestDoc.data();
+            const userSnapshot = await getDoc(doc(db, 'users', requestData.userId));
+            return { ...requestData, id: requestDoc.id, username: userSnapshot.data().displayName };
+          })
+        );
+        setRequests(requestWithUsernames);
       } else {
         console.log("No such document!");
       }
@@ -44,9 +61,10 @@ export const Request = () => {
 
     fetchRequests();
   }, []);
-  const changeUserRole = async (id, newRole) => {
-    const userRef = doc(db, 'users', id);
-    
+
+  const changeUserRole = async (userId, newRole) => {
+    const userRef = doc(db, 'users', userId);
+
     if (newRole === 'advance') {
       await updateDoc(userRef, {
         role: newRole,
@@ -60,28 +78,41 @@ export const Request = () => {
     }
   };
 
-  const handleStatusChange = async (id, newStatus) => {
-    const requestRef = doc(db, 'upgradeRequests', id);
-  
+  const handleStatusChange = async (requestId, newStatus) => {
+    const requestRef = doc(db, 'upgradeRequests', requestId);
+    const request = requests.find(req => req.id === requestId);
+
     if (newStatus === 'Granted') {
-      await changeUserRole(id, 'advance');
+      await changeUserRole(request.userId, 'advance');
       await updateDoc(requestRef, {
         status: newStatus
       });
     } else if (newStatus === 'Denied') {
-      await changeUserRole(id, 'normal');
+      await changeUserRole(request.userId, 'normal');
       await deleteDoc(requestRef);
     } else {
       await updateDoc(requestRef, {
         status: newStatus
       });
     }
-  
+
     setRequests(prevRequests =>
       prevRequests.map(request => 
-        request.id === id ? { ...request, status: newStatus } : request
+        request.id === requestId ? { ...request, status: newStatus } : request
       )
     );
+  };
+
+  const sortRequests = () => {
+    const sortedRequests = [...requests].sort((a, b) => {
+      if (sortOrder === 'asc') {
+        return a.timeRequest.localeCompare(b.timeRequest);
+      } else {
+        return b.timeRequest.localeCompare(a.timeRequest);
+      }
+    });
+    setRequests(sortedRequests);
+    setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
   };
 
   if (loading) {
@@ -103,16 +134,20 @@ export const Request = () => {
                 <Th border="1px solid" borderColor="gray.500">Date</Th>
                 <Th border="1px solid" borderColor="gray.500">Day</Th>
                 <Th border="1px solid" borderColor="gray.500">User ID</Th>
-                <Th border="1px solid" borderColor="gray.500">Time Request</Th>
+                <Th border="1px solid" borderColor="gray.500">Username</Th>
+                <Th border="1px solid" borderColor="gray.500" onClick={sortRequests} cursor="pointer">
+                  Time Request {sortOrder === 'asc' ? '↑' : '↓'}
+                </Th>
                 <Th border="1px solid" borderColor="gray.500">Status</Th>
               </Tr>
             </Thead>
             <Tbody>
-              {requests.map(request => (
-                <Tr key={request.id} >
+              {currentItems.map(request => (
+                <Tr key={request.id}>
                   <Td borderColor="gray.500">{request.date}</Td>
                   <Td borderColor="gray.500">{request.day}</Td>
                   <Td borderColor="gray.500">{request.userId}</Td>
+                  <Td borderColor="gray.500">{request.username}</Td>
                   <Td borderColor="gray.500" color={request.timeRequest === "00:00" ? "red.500" : "blue.500"}>
                     {request.timeRequest}
                   </Td>
@@ -135,6 +170,13 @@ export const Request = () => {
             </Tbody>
           </Table>
         </TableContainer>
+      </Box>
+      <Box mt={4} display="flex" justifyContent="center">
+        {[...Array(totalPages)].map((_, i) => (
+          <Button key={i} onClick={() => paginate(i + 1)} mx={1}>
+            {i + 1}
+          </Button>
+        ))}
       </Box>
       <Button leftIcon={<ArrowBackIcon />} colorScheme="green" mt={4} onClick={handleBack} mr={4}>
         Back
