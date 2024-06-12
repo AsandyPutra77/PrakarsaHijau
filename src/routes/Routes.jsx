@@ -14,6 +14,7 @@ import { DetailTipsPage } from "../pages/tips/DetailTipsPage";
 import { AboutUsPage } from "../pages/about/AboutUsPage";
 import { EditProfilePage } from "../pages/profile/EditProfilePage";
 import { RequestPage } from "../pages/admin/RequestPage";
+import { Calculator } from "../pages/calculate/Calculator";
 import  NotFound  from "../pages/NotFound/NotFound";
 
 export const Routers = () => {
@@ -33,6 +34,7 @@ export const Routers = () => {
             <Route path="/article" element={<Article />} />
             <Route path="/article/:id" element={<ArticleDetail />}/>
             <Route path="/about" element={<AboutUsPage />} />
+            <Route path="/calculate" element={<Calculator />} />
         </Routes>
     )
 }
