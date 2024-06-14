@@ -23,9 +23,7 @@ export const Routers = () => {
             <Route path="/" element={<Home />}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login />}/>
-
             <Route path="/*" element={<NotFound redirectPage="/landing"/>} />
-
             <Route path="/tips" element={<Tips />}/>
             <Route path="/tips/:id" element={<DetailTipsPage />}/>
             {ProtectedRoute("/contribute", <TipsForm />)}
