@@ -52,13 +52,13 @@ export const Hero = () => {
             </motion.button>
             <motion.button
               className="bg-[#136C59] border-[#136C59] text-white font-semibold px-4 md:px-10 py-2 border rounded-3xl mr-4 hover:bg-[#00A742] hover:border-[#00A742]"
-              onClick={() => Navigate('/article')}
+              onClick={() => Navigate('/calculate')}
               variants={fadeIn}
               initial="initial"
               animate="animate"
               transition={{ duration: 2 }}
             >
-              News
+              Emission Checker
             </motion.button>
           </div>
         </div>

@@ -14,6 +14,7 @@ import { DetailTipsPage } from "../pages/tips/DetailTipsPage";
 import { AboutUsPage } from "../pages/about/AboutUsPage";
 import { EditProfilePage } from "../pages/profile/EditProfilePage";
 import { RequestPage } from "../pages/admin/RequestPage";
+import { Calculator } from "../pages/calculate/Calculator";
 import  NotFound  from "../pages/NotFound/NotFound";
 
 export const Routers = () => {
@@ -22,7 +23,9 @@ export const Routers = () => {
             <Route path="/" element={<Home />}/>
             <Route path="/register" element={<Register/>}/>
             <Route path="/login" element={<Login />}/>
-            <Route path="*" element={<NotFound />} /> {/* Handle all other routes */}
+
+            <Route path="/*" element={<NotFound redirectPage="/landing"/>} />
+
             <Route path="/tips" element={<Tips />}/>
             <Route path="/tips/:id" element={<DetailTipsPage />}/>
             {ProtectedRoute("/contribute", <TipsForm />)}
@@ -33,6 +36,7 @@ export const Routers = () => {
             <Route path="/article" element={<Article />} />
             <Route path="/article/:id" element={<ArticleDetail />}/>
             <Route path="/about" element={<AboutUsPage />} />
+            <Route path="/calculate" element={<Calculator />} />
         </Routes>
     )
 }
