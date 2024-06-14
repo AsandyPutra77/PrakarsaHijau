@@ -16,7 +16,7 @@ Sebelum menjalankan proyek ini, pastikan Anda telah menginstal:
 - Node.js (versi terbaru direkomendasikan)
 - npm atau yarn
 
-## Instalasi
+## Replicate Project
 
 1. Clone repositori ini:
 
