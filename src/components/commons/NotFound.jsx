@@ -31,15 +31,18 @@ const NotFound = () => {
               borderRadius="full" 
               boxShadow="dark-lg" 
               color="green.700"
+
               onClick={handleBackToHome}
             >
               Back to Home
             </Button>
         </VStack>
         <Image src="/assets/404-icon 1.png" alt="404 Icon" boxSize={{ base: "300px", md: "800px" }} ml={{ base: 0, md: 10 }} />
+
       </Flex>
     </Box>
   );
 }
 
 export default NotFound;
+

@@ -16,7 +16,7 @@ Sebelum menjalankan proyek ini, pastikan Anda telah menginstal:
 - Node.js (versi terbaru direkomendasikan)
 - npm atau yarn
 
-## Instalasi
+## Replicate Project
 
 1. Clone repositori ini:
 
@@ -68,10 +68,12 @@ PrakarsaHijau/
 ├── public/              # Direktori untuk aset publik
 ├── src/                 # Direktori untuk sumber kode aplikasi
 │   ├── components/      # Komponen React
+│   ├── firebase/        # Konfigurasi Firebase
 │   ├── pages/           # Halaman aplikasi
-│   ├── themes/          # Tema kustom untuk Chakra UI
-│   ├── App.js           # Komponen utama aplikasi
-│   └── index.js         # File entri aplikasi
+│   ├── routes/          # Routes untuk website
+│   ├── styles/          # Menampung ChakraUI dan Tailwind
+│   ├── utils/           # Hooks, Context, formatter, history, mock, network.js
+│   ├── index.js/        # File entri website
 ├── package.json         # Konfigurasi npm
 └── README.md            # Dokumentasi proyek
 ```
