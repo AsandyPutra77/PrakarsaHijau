@@ -56,7 +56,7 @@ atau
 yarn start
 ```
 
-Aplikasi akan berjalan di `http://localhost:3000`.
+Aplikasi akan berjalan di `http://localhost:5173`.
 
 ## Struktur Proyek
 
@@ -88,13 +88,9 @@ Kami menyambut kontribusi dari siapa pun. Jika Anda ingin berkontribusi, silakan
 4. Push ke branch (`git push origin fitur-anda`)
 5. Buat pull request
 
-## Lisensi
-
-Proyek ini dilisensikan di bawah lisensi [MIT License](LICENSE).
-
 ## Kontak
 
-Jika Anda memiliki pertanyaan atau saran, silakan hubungi kami melalui email: support@prakarsahijau.com
+Jika Anda memiliki pertanyaan atau saran, silakan hubungi kami melalui email: C624-PS130@dicoding.org
 
 ---
 
