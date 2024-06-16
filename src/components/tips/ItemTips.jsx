@@ -7,10 +7,10 @@ import { doc, onSnapshot, updateDoc, arrayUnion, arrayRemove } from 'firebase/fi
 import { db } from "../../firebase/firebase";
 import { timeFormatter } from "../../utils/formatter/timeFormatter";
 import { FaRegThumbsUp, FaThumbsUp, FaRegThumbsDown, FaThumbsDown } from "react-icons/fa";
-import { AuthContext } from "../../utils/context/AuthContext"; // Import AuthContext
+import { AuthContext } from "../../utils/context/AuthContext"; 
 
 export const ItemTips = ({ tip }) => {
-    const { currentUser } = useContext(AuthContext); // Use AuthContext to get the current user
+    const { currentUser } = useContext(AuthContext); 
     const [user, setUser] = useState(null);
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
@@ -42,7 +42,7 @@ export const ItemTips = ({ tip }) => {
     }, [tip.uid, tip.id, currentUser]);
 
     const handleLike = async () => {
-        if (!currentUser) return; // Ensure there's a logged-in user
+        if (!currentUser) return; 
 
         const tipRef = doc(db, 'tips', tip.id);
         if (liked) {
@@ -70,7 +70,7 @@ export const ItemTips = ({ tip }) => {
     };
 
     const handleDislike = async () => {
-        if (!currentUser) return; // Ensure there's a logged-in user
+        if (!currentUser) return; 
 
         const tipRef = doc(db, 'tips', tip.id);
         if (disliked) {
