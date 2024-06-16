@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Box, Heading, Text, HStack, Image, Tag, TagLabel, TagRightIcon, Avatar, Link as ReactRouterLink, IconButton } from "@chakra-ui/react";
 import { ArrowForwardIcon } from '@chakra-ui/icons';
 import { IoIosPricetags } from "react-icons/io";
 import { Link } from "react-router-dom";
-import { doc, onSnapshot, updateDoc, arrayUnion, arrayRemove} from 'firebase/firestore';
+import { doc, onSnapshot, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from "../../firebase/firebase";
 import { timeFormatter } from "../../utils/formatter/timeFormatter";
 import { FaRegThumbsUp, FaThumbsUp, FaRegThumbsDown, FaThumbsDown } from "react-icons/fa";
+import { AuthContext } from "../../utils/context/AuthContext"; // Import AuthContext
 
 export const ItemTips = ({ tip }) => {
-
+    const { currentUser } = useContext(AuthContext); // Use AuthContext to get the current user
     const [user, setUser] = useState(null);
     const [likes, setLikes] = useState(0);
     const [dislikes, setDislikes] = useState(0);
@@ -18,41 +19,50 @@ export const ItemTips = ({ tip }) => {
 
     useEffect(() => {
         if (tip.uid) {
-            const unsub = onSnapshot(doc(db, 'users', tip.uid), (doc) => {
+            const unsubUser = onSnapshot(doc(db, 'users', tip.uid), (doc) => {
                 setUser(doc.data());
             });
+
             const tipRef = doc(db, 'tips', tip.id);
-            onSnapshot(tipRef, (doc) => {
+            const unsubTip = onSnapshot(tipRef, (doc) => {
                 const data = doc.data();
-                setLikes(data.likes);
-                setDislikes(data.dislikes);
-                setLiked(data.likedUsers && data.likedUsers.includes(tip.uid));
-                setDisliked(data.dislikedUsers && data.dislikedUsers.includes(tip.uid));
+                setLikes(data.likes || 0);
+                setDislikes(data.dislikes || 0);
+                if (currentUser) {
+                    setLiked(data.likedUsers ? data.likedUsers.includes(currentUser.uid) : false);
+                    setDisliked(data.dislikedUsers ? data.dislikedUsers.includes(currentUser.uid) : false);
+                }
             });
-            return () => unsub();
+
+            return () => {
+                unsubUser();
+                unsubTip();
+            };
         }
-    }, [tip.uid, tip.id]);
+    }, [tip.uid, tip.id, currentUser]);
 
     const handleLike = async () => {
+        if (!currentUser) return; // Ensure there's a logged-in user
+
         const tipRef = doc(db, 'tips', tip.id);
         if (liked) {
             setLikes(likes - 1);
             await updateDoc(tipRef, {
                 likes: likes - 1,
-                likedUsers: arrayRemove(tip.uid)
+                likedUsers: arrayRemove(currentUser.uid)
             });
         } else {
             setLikes(likes + 1);
             await updateDoc(tipRef, {
                 likes: likes + 1,
-                likedUsers: arrayUnion(tip.uid)
+                likedUsers: arrayUnion(currentUser.uid)
             });
             if (disliked) {
                 setDisliked(false);
                 setDislikes(dislikes - 1);
                 await updateDoc(tipRef, {
                     dislikes: dislikes - 1,
-                    dislikedUsers: arrayRemove(tip.uid)
+                    dislikedUsers: arrayRemove(currentUser.uid)
                 });
             }
         }
@@ -60,25 +70,27 @@ export const ItemTips = ({ tip }) => {
     };
 
     const handleDislike = async () => {
+        if (!currentUser) return; // Ensure there's a logged-in user
+
         const tipRef = doc(db, 'tips', tip.id);
         if (disliked) {
             setDislikes(dislikes - 1);
             await updateDoc(tipRef, {
                 dislikes: dislikes - 1,
-                dislikedUsers: arrayRemove(tip.uid)
+                dislikedUsers: arrayRemove(currentUser.uid)
             });
         } else {
             setDislikes(dislikes + 1);
             await updateDoc(tipRef, {
                 dislikes: dislikes + 1,
-                dislikedUsers: arrayUnion(tip.uid)
+                dislikedUsers: arrayUnion(currentUser.uid)
             });
             if (liked) {
                 setLiked(false);
                 setLikes(likes - 1);
                 await updateDoc(tipRef, {
                     likes: likes - 1,
-                    likedUsers: arrayRemove(tip.uid)
+                    likedUsers: arrayRemove(currentUser.uid)
                 });
             }
         }
