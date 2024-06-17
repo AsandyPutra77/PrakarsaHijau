@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { doc, updateDoc, deleteField, deleteDoc, getDoc } from "firebase/firestore";
+import { doc, updateDoc, deleteField, deleteDoc, getDoc, collection, getDocs } from "firebase/firestore";
 import { db } from "../../../firebase/firebase";
 import {
   Box,
@@ -17,19 +17,18 @@ import {
 } from "@chakra-ui/react";
 import { ArrowBackIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router-dom";
-import { collection, getDocs } from "firebase/firestore";
 
 export const Request = () => {
   const [requests, setRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage, ] = useState(10);
+  const [itemsPerPage] = useState(10);
   const [sortOrder, setSortOrder] = useState('asc');
   const navigate = useNavigate();
 
   const handleBack = () => {
     navigate(-1);
-  }
+  };
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
@@ -45,7 +44,7 @@ export const Request = () => {
 
       if (!snapshot.empty) {
         const requestWithUsernames = await Promise.all(
-          snapshot.docs.map(async requestDoc => {
+          snapshot.docs.map(async (requestDoc) => {
             const requestData = requestDoc.data();
             const userSnapshot = await getDoc(doc(db, 'users', requestData.userId));
             return { ...requestData, id: requestDoc.id, username: userSnapshot.data().displayName };
@@ -55,7 +54,7 @@ export const Request = () => {
       } else {
         console.log("No such document!");
       }
-      
+
       setLoading(false);
     };
 
@@ -97,7 +96,7 @@ export const Request = () => {
     }
 
     setRequests(prevRequests =>
-      prevRequests.map(request => 
+      prevRequests.map(request =>
         request.id === requestId ? { ...request, status: newStatus } : request
       )
     );
@@ -106,9 +105,9 @@ export const Request = () => {
   const sortRequests = () => {
     const sortedRequests = [...requests].sort((a, b) => {
       if (sortOrder === 'asc') {
-        return a.timeRequest.localeCompare(b.timeRequest);
+        return new Date(a.date) - new Date(b.date);
       } else {
-        return b.timeRequest.localeCompare(a.timeRequest);
+        return new Date(b.date) - new Date(a.date);
       }
     });
     setRequests(sortedRequests);
@@ -124,21 +123,21 @@ export const Request = () => {
   }
 
   return (
-    <Box p={[2, 4, 5]} maxWidth={["90%", "85%", "80%"]} mx="auto">
-      <Text fontSize={["lg", "xl", "2xl"]} mb={5}>Role Request Overview</Text>
+    <Box p={[2, 4, 5]} maxWidth={["90%", "85%", "80%"]} mx="auto" bg="gray.50" borderRadius="md" boxShadow="lg" mb={'8'} mt={8}>
+      <Text fontSize={["lg", "xl", "2xl"]} mb={5} color="#0B9586" fontWeight="bold">Role Request Overview</Text>
       <Box overflowX="auto">
         <TableContainer>
           <Table variant="striped" colorScheme="green" size="sm" border='1px solid' borderColor="gray.500" borderRadius="md">
-            <Thead>
+            <Thead bg="#6ED840">
               <Tr>
-                <Th border="1px solid" borderColor="gray.500">Date</Th>
-                <Th border="1px solid" borderColor="gray.500">Day</Th>
-                <Th border="1px solid" borderColor="gray.500">User ID</Th>
-                <Th border="1px solid" borderColor="gray.500">Username</Th>
-                <Th border="1px solid" borderColor="gray.500" onClick={sortRequests} cursor="pointer">
-                  Time Request {sortOrder === 'asc' ? '↑' : '↓'}
+                <Th border="1px solid" borderColor="gray.500" color="white" onClick={sortRequests} cursor="pointer">
+                  Date {sortOrder === 'asc' ? '↑' : '↓'}
                 </Th>
-                <Th border="1px solid" borderColor="gray.500">Status</Th>
+                <Th border="1px solid" borderColor="gray.500" color="white">Day</Th>
+                <Th border="1px solid" borderColor="gray.500" color="white">User ID</Th>
+                <Th border="1px solid" borderColor="gray.500" color="white">Username</Th>
+                <Th border="1px solid" borderColor="gray.500" color="white">Time Request</Th>
+                <Th border="1px solid" borderColor="gray.500" color="white">Status</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -158,7 +157,7 @@ export const Request = () => {
                       variant="outline"
                       borderColor="gray.500"
                       width={["100px", "120px", "150px"]}
-                      _focus={{ bg: request.status === 'Denied' ? 'red' : 'green.300' }}
+                      _focus={{ bg: request.status === 'Denied' ? 'red.300' : 'green.300' }}
                     >
                       <option value="Pending">Pending</option>
                       <option value="Granted">Granted</option>
@@ -173,7 +172,7 @@ export const Request = () => {
       </Box>
       <Box mt={4} display="flex" justifyContent="center">
         {[...Array(totalPages)].map((_, i) => (
-          <Button key={i} onClick={() => paginate(i + 1)} mx={1}>
+          <Button key={i} onClick={() => paginate(i + 1)} mx={1} colorScheme="green">
             {i + 1}
           </Button>
         ))}
