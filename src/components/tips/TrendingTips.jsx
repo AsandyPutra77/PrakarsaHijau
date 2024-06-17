@@ -1,15 +1,17 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Box, Flex, Image, Text, Heading, IconButton, Avatar, HStack } from '@chakra-ui/react';
+import { Box, Flex, Image, Text, Heading, IconButton, HStack } from '@chakra-ui/react';
 import { db } from '../../firebase/firebase';
 import { collection, getDocs, query, orderBy, doc, updateDoc, arrayUnion, arrayRemove, onSnapshot } from 'firebase/firestore';
 import { FaThumbsUp, FaRegThumbsUp, FaThumbsDown, FaRegThumbsDown } from 'react-icons/fa';
+import { AuthContext } from "../../utils/context/AuthContext"; 
 
 export const TrendingTips = () => {
     const [tips, setTips] = useState([]);
     const navigate = useNavigate();
+    const { currentUser } = useContext(AuthContext);
 
     const variants = {
         hidden: { opacity: 0 },
@@ -33,23 +35,25 @@ export const TrendingTips = () => {
     }, []);
 
     const handleLike = async (tip) => {
+        if (!currentUser) return;
+
         const tipRef = doc(db, 'tips', tip.id);
         if (tip.liked) {
             await updateDoc(tipRef, {
                 likes: tip.likes - 1,
-                likedUsers: arrayRemove(tip.uid)
+                likedUsers: arrayRemove(currentUser.uid)
             });
             tip.likes -= 1;
         } else {
             await updateDoc(tipRef, {
                 likes: tip.likes + 1,
-                likedUsers: arrayUnion(tip.uid)
+                likedUsers: arrayUnion(currentUser.uid)
             });
             tip.likes += 1;
             if (tip.disliked) {
                 await updateDoc(tipRef, {
                     dislikes: tip.dislikes - 1,
-                    dislikedUsers: arrayRemove(tip.uid)
+                    dislikedUsers: arrayRemove(currentUser.uid)
                 });
                 tip.dislikes -= 1;
                 tip.disliked = false;
@@ -60,23 +64,25 @@ export const TrendingTips = () => {
     };
 
     const handleDislike = async (tip) => {
+        if (!currentUser) return;
+
         const tipRef = doc(db, 'tips', tip.id);
         if (tip.disliked) {
             await updateDoc(tipRef, {
                 dislikes: tip.dislikes - 1,
-                dislikedUsers: arrayRemove(tip.uid)
+                dislikedUsers: arrayRemove(currentUser.uid)
             });
             tip.dislikes -= 1;
         } else {
             await updateDoc(tipRef, {
                 dislikes: tip.dislikes + 1,
-                dislikedUsers: arrayUnion(tip.uid)
+                dislikedUsers: arrayUnion(currentUser.uid)
             });
             tip.dislikes += 1;
             if (tip.liked) {
                 await updateDoc(tipRef, {
                     likes: tip.likes - 1,
-                    likedUsers: arrayRemove(tip.uid)
+                    likedUsers: arrayRemove(currentUser.uid)
                 });
                 tip.likes -= 1;
                 tip.liked = false;
@@ -106,9 +112,9 @@ export const TrendingTips = () => {
                             <Flex justify="space-between" align="center">
                                 <Flex>
                                     <HStack spacing={4}>
-                                        <IconButton aria-label="Like" icon={tip.liked ? <FaThumbsUp /> : <FaRegThumbsUp />} onClick={(e) => { e.stopPropagation(); handleLike(tip); }} />
+                                        <IconButton aria-label="Like" icon={(tip.likedUsers?.includes(currentUser?.uid)) ? <FaThumbsUp /> : <FaRegThumbsUp />} onClick={(e) => { e.stopPropagation(); handleLike(tip); }} />
                                         <Text>{tip.likes}</Text>
-                                        <IconButton aria-label="Dislike" icon={tip.disliked ? <FaThumbsDown /> : <FaRegThumbsDown />} onClick={(e) => { e.stopPropagation(); handleDislike(tip); }} />
+                                        <IconButton aria-label="Dislike" icon={(tip.dislikedUsers?.includes(currentUser?.uid)) ? <FaThumbsDown /> : <FaRegThumbsDown />} onClick={(e) => { e.stopPropagation(); handleDislike(tip); }} />
                                         <Text>{tip.dislikes}</Text>
                                     </HStack>
                                 </Flex>
